@@ -1,0 +1,32 @@
+{
+  "input_file": "D:\\Me\\毕业论文\\langextract\\notices\\notice04",
+  "document_id": "doc_6c5a7e65",
+  "source_length": 1025,
+  "raw_count": 9,
+  "accepted_count": 8,
+  "rejected_count": 1,
+  "rejections": [
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "展会期间每天13:00-19:00将实施临时交通管制，作为出租车轮候区。",
+      "extraction": {
+        "extraction_class": "travel_advice",
+        "extraction_text": "展会期间每天13:00-19:00南风西路作为出租车轮候区。",
+        "attributes": {
+          "advice_type": "出租车轮候区",
+          "route": "南风西路"
+        },
+        "char_interval": {
+          "start_pos": 374,
+          "end_pos": 410
+        },
+        "alignment_status": "match_fuzzy",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "input_file": "D:\\Me\\毕业论文\\langextract\\notices\\notice05",
+  "document_id": "doc_af0dd372",
+  "source_length": 1280,
+  "raw_count": 7,
+  "accepted_count": 6,
+  "rejected_count": 1,
+  "rejections": [
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "travel_advice",
+        "extraction_text": "建议观众尽量选择公共交通工具前往，以减少交通拥堵。",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 7,
+        "group_index": 6,
+        "description": null
+      }
+    }
+  ]
+}

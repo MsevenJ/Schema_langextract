@@ -1,0 +1,45 @@
+{
+  "input_file": "D:\\Me\\毕业论文\\langextract\\traffic_notice.txt",
+  "document_id": "doc_3fc41b14",
+  "source_length": 427,
+  "raw_count": 11,
+  "accepted_count": 9,
+  "rejected_count": 2,
+  "rejections": [
+    {
+      "reasons": [
+        "结束语不是发布机关"
+      ],
+      "located_text": "特此通告。",
+      "extraction": {
+        "extraction_class": "issuing_authority",
+        "extraction_text": "特此通告。",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 422,
+          "end_pos": 427
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 10,
+        "group_index": 9,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "未提供具体日期",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 11,
+        "group_index": 10,
+        "description": null
+      }
+    }
+  ]
+}

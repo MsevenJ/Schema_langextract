@@ -1,0 +1,32 @@
+{
+  "input_file": "D:\\Me\\毕业论文\\langextract\\notices\\notice06",
+  "document_id": "doc_abb4b85d",
+  "source_length": 796,
+  "raw_count": 11,
+  "accepted_count": 10,
+  "rejected_count": 1,
+  "rejections": [
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "2026年10月17日",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "2026年10月17日16:00—23:00",
+        "attributes": {
+          "start_text": "2026年10月17日16:00",
+          "end_text": "23:00"
+        },
+        "char_interval": {
+          "start_pos": 219,
+          "end_pos": 230
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null
+      }
+    }
+  ]
+}
