@@ -1,30 +1,194 @@
 {
-  "input_file": "D:\\Me\\毕业论文\\langextract\\notices\\notice04",
-  "document_id": "doc_6c5a7e65",
+  "schema_version": "2.0",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice04.txt",
+  "document_id": "doc_7f0068f3",
   "source_length": 1025,
-  "raw_count": 9,
-  "accepted_count": 8,
-  "rejected_count": 1,
+  "raw_count": 20,
+  "accepted_count": 12,
+  "rejected_count": 8,
   "rejections": [
     {
       "reasons": [
         "定位出的原文与 extraction_text 不一致"
       ],
-      "located_text": "展会期间每天13:00-19:00将实施临时交通管制，作为出租车轮候区。",
+      "located_text": "广交会",
       "extraction": {
-        "extraction_class": "travel_advice",
-        "extraction_text": "展会期间每天13:00-19:00南风西路作为出租车轮候区。",
-        "attributes": {
-          "advice_type": "出租车轮候区",
-          "route": "南风西路"
-        },
+        "extraction_class": "event_venue",
+        "extraction_text": "广交会展馆",
+        "attributes": {},
         "char_interval": {
-          "start_pos": 374,
-          "end_pos": 410
+          "start_pos": 65,
+          "end_pos": 68
         },
-        "alignment_status": "match_fuzzy",
+        "alignment_status": "match_lesser",
         "extraction_index": 2,
         "group_index": 1,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "该文本不是发布机关",
+        "网页来源字段不是发布机关"
+      ],
+      "located_text": "本网",
+      "extraction": {
+        "extraction_class": "issuing_authority",
+        "extraction_text": "本网",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 44,
+          "end_pos": 46
+        },
+        "alignment_status": "match_fuzzy",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "发布日期必须是原文中的年月或年月日"
+      ],
+      "located_text": "2026-10-14",
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "2026-10-14",
+        "attributes": {
+          "precision": "day"
+        },
+        "char_interval": {
+          "start_pos": 24,
+          "end_pos": 34
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "与已保留结果重复或被更完整结果覆盖"
+      ],
+      "located_text": "10月15日至11月4日",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月15日至11月4日",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 75,
+          "end_pos": 87
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 3,
+        "group_index": 2,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "control_rule 不包含强制性交通管理措施",
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "东至东环快速（不含）、南至新滘路（含）、西至猎德大道及江海大道（含）、北至临江大道（含）及黄埔大道（含）",
+      "extraction": {
+        "extraction_class": "control_rule",
+        "extraction_text": "东至东环快速（不含）、南至新滘路（含）、西至猎德大道及江海大道（含）、北至临江大道（含）及黄埔大道（含）的相关路口、节点视情采取临时交通控流和分流措施。",
+        "attributes": {
+          "road_names": [
+            "东环快速、新滘路、猎德大道、江海大道、临江大道、黄埔大道"
+          ],
+          "road_range": "东至东环快速（不含）、南至新滘路（含）、西至猎德大道及江海大道（含）、北至临江大道（含）及黄埔大道（含）的相关路口、节点",
+          "direction": "",
+          "time_text": "展会期间",
+          "measure": "临时交通控流和分流",
+          "vehicle_scope": "",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": {
+          "start_pos": 416,
+          "end_pos": 468
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 4,
+        "group_index": 3,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "社会车辆可经展场西路借道进入广交会展馆。",
+        "attributes": {
+          "guidance_type": "access",
+          "route_or_location": "展场西路",
+          "time_text": "08:00至11:00",
+          "vehicle_scope": "社会车辆",
+          "action": "借道进入",
+          "condition": "持有广交会车证的车辆除外"
+        },
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "与已保留结果重复或被更完整结果覆盖"
+      ],
+      "located_text": "散场期间（16:30至19:00），适时启用南风东华快通道，对南风东路双向实施临时交通管制，指引展馆内离场车辆从7号门经南风东路华快通道直接进入新洲收费站。",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "散场期间（16:30至19:00），适时启用南风东华快通道，对南风东路双向实施临时交通管制，指引展馆内离场车辆从7号门经南风东路华快通道直接进入新洲收费站。",
+        "attributes": {
+          "guidance_type": "egress",
+          "route_or_location": "南风东路、7号门、南风东华快通道、新洲收费站",
+          "time_text": "16:30至19:00",
+          "vehicle_scope": "离场车辆",
+          "action": "从7号门经南风东路华快通道直接进入新洲收费站",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 498,
+          "end_pos": 576
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "散场高峰时段（16:00至19:00），搭乘网约车可前往以下指定区域：\n\n①广交会堂；\n\n②琶洲大道东（西往东方向，会展东路口往东100米路段）；\n\n③会展南二路；\n\n④会展南三路。",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "散场高峰时段（16:00至19:00），搭乘网约车可前往以下指定区域：①广交会堂；②琶洲大道东（西往东方向，会展东路口往东100米路段）；③会展南二路；④会展南三路。",
+        "attributes": {
+          "guidance_type": "drop_off",
+          "route_or_location": "广交会堂、琶洲大道东（西往东方向，会展东路口往东100米路段）、会展南二路、会展南三路",
+          "time_text": "16:00至19:00",
+          "vehicle_scope": "网约车",
+          "action": "上客",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 707,
+          "end_pos": 798
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 3,
+        "group_index": 2,
         "description": null
       }
     }

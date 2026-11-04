@@ -1,30 +1,122 @@
 {
-  "input_file": "D:\\Me\\毕业论文\\langextract\\notices\\notice06",
-  "document_id": "doc_abb4b85d",
+  "schema_version": "2.0",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice06.txt",
+  "document_id": "doc_5d43a7e2",
   "source_length": 796,
-  "raw_count": 11,
-  "accepted_count": 10,
-  "rejected_count": 1,
+  "raw_count": 21,
+  "accepted_count": 16,
+  "rejected_count": 5,
   "rejections": [
     {
       "reasons": [
         "定位出的原文与 extraction_text 不一致"
       ],
-      "located_text": "2026年10月17日",
+      "located_text": "“动力火车",
       "extraction": {
-        "extraction_class": "control_time",
-        "extraction_text": "2026年10月17日16:00—23:00",
+        "extraction_class": "event_name",
+        "extraction_text": "“动力火车”一路向前”巡回演唱会",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 80,
+          "end_pos": 85
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "玉环市",
+      "extraction": {
+        "extraction_class": "issuing_authority",
+        "extraction_text": "玉环市公安局交通警察大队",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 3,
+          "end_pos": 6
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "2026年10月",
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "2026年10月14日",
         "attributes": {
-          "start_text": "2026年10月17日16:00",
-          "end_text": "23:00"
+          "precision": "day"
         },
         "char_interval": {
-          "start_pos": 219,
-          "end_pos": 230
+          "start_pos": 69,
+          "end_pos": 77
         },
         "alignment_status": "match_lesser",
         "extraction_index": 2,
         "group_index": 1,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_rule",
+        "extraction_text": "外环岛路科园桥到滨江大道禁止车辆驶入。",
+        "attributes": {
+          "road_names": [
+            "外环岛路"
+          ],
+          "road_range": "科园桥到滨江大道",
+          "direction": "",
+          "time_text": "21:30—23:00",
+          "measure": "禁止车辆驶入",
+          "vehicle_scope": "车辆",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 11,
+        "group_index": 10,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_rule",
+        "extraction_text": "外环岛路肾病医院路口到滨江大道禁止车辆驶入。",
+        "attributes": {
+          "road_names": [
+            "外环岛路"
+          ],
+          "road_range": "肾病医院路口到滨江大道",
+          "direction": "",
+          "time_text": "21:30—23:00",
+          "measure": "禁止车辆驶入",
+          "vehicle_scope": "车辆",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 12,
+        "group_index": 11,
         "description": null
       }
     }

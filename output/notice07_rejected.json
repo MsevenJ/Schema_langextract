@@ -1,9 +1,70 @@
 {
-  "input_file": "D:\\Me\\毕业论文\\langextract\\notices\\notice07",
-  "document_id": "doc_c1b7fb4e",
+  "schema_version": "2.0",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice07.txt",
+  "document_id": "doc_aa484f67",
   "source_length": 742,
-  "raw_count": 10,
-  "accepted_count": 10,
-  "rejected_count": 0,
-  "rejections": []
+  "raw_count": 18,
+  "accepted_count": 15,
+  "rejected_count": 3,
+  "rejections": [
+    {
+      "reasons": [
+        "该文本不是发布机关"
+      ],
+      "located_text": "特此公告",
+      "extraction": {
+        "extraction_class": "issuing_authority",
+        "extraction_text": "特此公告",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 724,
+          "end_pos": 728
+        },
+        "alignment_status": "match_fuzzy",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "2026",
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "2026年10月",
+        "attributes": {
+          "precision": "month"
+        },
+        "char_interval": {
+          "start_pos": 40,
+          "end_pos": 44
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月18日22时至10月26日6时",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "2026年10月18日22时至10月26日6时",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 223,
+          "end_pos": 241
+        },
+        "alignment_status": "match_fuzzy",
+        "extraction_index": 4,
+        "group_index": 3,
+        "description": null
+      }
+    }
+  ]
 }

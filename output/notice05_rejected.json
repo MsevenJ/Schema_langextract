@@ -1,24 +1,150 @@
 {
-  "input_file": "D:\\Me\\毕业论文\\langextract\\notices\\notice05",
-  "document_id": "doc_af0dd372",
+  "schema_version": "2.0",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice05.txt",
+  "document_id": "doc_13a12c5c",
   "source_length": 1280,
-  "raw_count": 7,
-  "accepted_count": 6,
-  "rejected_count": 1,
+  "raw_count": 24,
+  "accepted_count": 19,
+  "rejected_count": 5,
   "rejections": [
     {
       "reasons": [
-        "char_interval 不存在"
+        "control_rule 不包含强制性交通管理措施"
       ],
-      "located_text": null,
+      "located_text": "田海路（火炬路以北）车辆可经田海路、尚信路、振和路向东或西方向行驶进入火炬路。",
       "extraction": {
-        "extraction_class": "travel_advice",
-        "extraction_text": "建议观众尽量选择公共交通工具前往，以减少交通拥堵。",
-        "attributes": {},
-        "char_interval": null,
-        "alignment_status": null,
+        "extraction_class": "control_rule",
+        "extraction_text": "田海路（火炬路以北）车辆可经田海路、尚信路、振和路向东或西方向行驶进入火炬路。",
+        "attributes": {
+          "road_names": [
+            "田海路",
+            "尚信路",
+            "振和路"
+          ],
+          "road_range": "",
+          "direction": "",
+          "time_text": "",
+          "measure": "绕行",
+          "vehicle_scope": "",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": {
+          "start_pos": 688,
+          "end_pos": 727
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 5,
+        "group_index": 4,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "control_rule 不包含强制性交通管理措施"
+      ],
+      "located_text": "田海路（火炬路以南）车辆可从火炬路田海路路口左转或右转进入火炬路。",
+      "extraction": {
+        "extraction_class": "control_rule",
+        "extraction_text": "田海路（火炬路以南）车辆可从火炬路田海路路口左转或右转进入火炬路。",
+        "attributes": {
+          "road_names": [
+            "田海路",
+            "火炬路"
+          ],
+          "road_range": "",
+          "direction": "",
+          "time_text": "",
+          "measure": "绕行",
+          "vehicle_scope": "",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": {
+          "start_pos": 731,
+          "end_pos": 764
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 6,
+        "group_index": 5,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "市民健身中心内部停车场；",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "市民健身中心内部停车场；奥特莱斯及周边小路可停放社会车辆；市民健身中心东停车场（2号地块）；田海路一线道路两侧允许临时停放社会车辆；尚信路一线道路两侧允许临时停放社会车辆。",
+        "attributes": {
+          "guidance_type": "parking",
+          "route_or_location": "",
+          "time_text": "",
+          "vehicle_scope": "社会车辆",
+          "action": "允许停放",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 778,
+          "end_pos": 790
+        },
+        "alignment_status": "match_lesser",
         "extraction_index": 7,
         "group_index": 6,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "市民健身中心内部停车场；",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "市民健身中心内部停车场；奥特莱斯及周边小路可停放社会车辆；市民健身中心东停车场（2号地块）；田海路一线道路两侧允许临时停放社会车辆；尚信路一线道路两侧允许临时停放社会车辆。",
+        "attributes": {
+          "guidance_type": "parking",
+          "route_or_location": "市民健身中心内部、奥特莱斯及周边小路、市民健身中心东停车场（2号地块）、田海路一线、尚信路一线",
+          "time_text": "",
+          "vehicle_scope": "社会车辆",
+          "action": "停放",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 778,
+          "end_pos": 790
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "与已保留结果重复或被更完整结果覆盖"
+      ],
+      "located_text": "火炬路（田海路-尚信路）双向禁止停车。",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "火炬路（田海路-尚信路）双向禁止停车。",
+        "attributes": {
+          "guidance_type": "parking",
+          "route_or_location": "火炬路（田海路-尚信路）",
+          "time_text": "",
+          "vehicle_scope": "社会车辆",
+          "action": "禁止停车",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 886,
+          "end_pos": 905
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 2,
+        "group_index": 1,
         "description": null
       }
     }
