@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import argparse
+import csv
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 import subprocess
 import sys
 import time
+
+from traffic_schema.review_export import write_review_queue
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -71,6 +74,11 @@ def parse_args() -> argparse.Namespace:
         "--dry-run",
         action="store_true",
         help="只检查并显示执行计划，不启动 Ollama 推理。",
+    )
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        help="可选 event_id 清单，原样传给单篇脚本。",
     )
     return parser.parse_args()
 
@@ -135,6 +143,7 @@ def run_notice(
     output_dir: Path,
     retries: int,
     retry_delay: float,
+    manifest: Path | None = None,
 ) -> RunResult:
     output_dir.mkdir(parents=True, exist_ok=True)
     log_path = output_dir / f"{input_path.stem}_run.log"
@@ -146,6 +155,8 @@ def run_notice(
         "--output-dir",
         str(output_dir),
     ]
+    if manifest is not None:
+        command.extend(["--manifest", str(manifest.resolve())])
 
     batch_started_at = datetime.now().astimezone()
     batch_started = time.monotonic()
@@ -210,6 +221,18 @@ def print_plan(input_paths: list[Path], output_dir: Path) -> None:
         print(f"  [{index}] {path}")
 
 
+def merge_review_queues(input_paths: list[Path], output_dir: Path) -> Path:
+    """Merge per-notice review files produced by successful subprocesses."""
+    rows: list[dict[str, str]] = []
+    for input_path in input_paths:
+        review_path = output_dir / f"{input_path.stem}_review.csv"
+        if not review_path.is_file():
+            continue
+        with review_path.open("r", encoding="utf-8-sig", newline="") as file_handle:
+            rows.extend(csv.DictReader(file_handle))
+    return write_review_queue(rows, output_dir / "review_queue.csv")
+
+
 def main() -> int:
     args = parse_args()
     try:
@@ -230,6 +253,7 @@ def main() -> int:
                     output_dir,
                     args.retries,
                     args.retry_delay,
+                    args.manifest,
                 )
             except Exception as exc:  # Record the exception and continue in order.
                 print(f"[异常] {input_path.name}: {type(exc).__name__}: {exc}")
@@ -246,11 +270,13 @@ def main() -> int:
         failed_processes = sum(result.return_code != 0 for result in results)
         crashed = len(input_paths) - len(results)
         failed = failed_processes + crashed
+        review_path = merge_review_queues(input_paths, output_dir)
         print("\n批量处理统计：")
         print(f"  总数：{len(input_paths)}")
         print(f"  成功：{successful}")
         print(f"  失败：{failed}")
         print(f"  日志目录：{output_dir}")
+        print(f"  人工复核表：{review_path}")
         return 0 if failed == 0 else 1
     except Exception as exc:
         print(f"批量任务未启动：{type(exc).__name__}: {exc}", file=sys.stderr)

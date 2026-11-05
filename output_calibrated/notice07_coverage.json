@@ -1,0 +1,274 @@
+{
+  "source_id": "src_fd3228f759d7e62004cadf23",
+  "source_sections": [
+    {
+      "text": "对相关道路采取交通管控措施的公告",
+      "char_start": 19,
+      "char_end": 35,
+      "level": 0
+    }
+  ],
+  "candidate_provisions": [
+    {
+      "candidate_id": "evd_7b57c177b0b70c806565d4ae",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "2026中国国际农业机械展览会（以下简称“农机展”）定于10月26日至10月28日在国家会展中心（天津）举办。为保证道路交通安全畅通，依据《中华人民共和国道路交通安全法》及相关法律法规规定，对国家会展中心（天津）周边部分道路采取以下交通管控措施：",
+      "char_start": 40,
+      "char_end": 163,
+      "road_names": [
+        "为保证道路",
+        "中华人民共和国道路",
+        "周边部分道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_1aa8684f7c198ff5a860ae71"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_df0a4598730f2840e0d11a23",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "一、2026年10月18日22时至10月29日22时，对国展大道（辛柴路至国瑞路段）主路、辅路双向禁止一切车辆通行（10月18日22时至10月26日6时持布撤展车证、10月26日6时至10月28日22时持农机展嘉宾大巴车辆通行证除外），社会车辆可绕行辛柴路、国瑞路、海河南道等道路。",
+      "char_start": 165,
+      "char_end": 306,
+      "road_names": [
+        "对国展大道",
+        "辛柴路至国瑞路",
+        "主路",
+        "辅路",
+        "社会车辆可绕行辛柴路",
+        "国瑞路",
+        "海河南道等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_791b2eb22d5f11153eed07c9",
+        "ext_6f52d9fd8e72f532a1f75e32",
+        "ext_103c6ed95f5a0a7887f06248"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_0fd8f1050f4154fac0c3081b",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "二、2026年10月26日至10月28日，每日7时至18时，视情对会展辅路（国瑞路至会展中心南登录大厅南门路段）、海河南道南侧辅道（宁静东辅道至国瑞路段）由西向东禁止机动车通行（持农机展车辆通行证以及制式出租车除外），社会车辆可绕行天津大道、辛柴路、海河南道等道路。",
+      "char_start": 308,
+      "char_end": 441,
+      "road_names": [
+        "视情对会展辅路",
+        "国瑞路至会展中心南登录大厅南门路",
+        "海河南道南侧辅道",
+        "宁静东辅道至国瑞路",
+        "社会车辆可绕行天津大道",
+        "辛柴路",
+        "海河南道等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_a63cbbc0c02a435a73ca12c6",
+        "ext_810f5f3af8f4f91024fb2c72",
+        "ext_51a395dba6bd3b92459601a1",
+        "ext_091a8280f77404d91fba3a37"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_830294565f73ccb2e523d589",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "三、2026年10月18日22时至10月28日18时，对宁静东辅道（海河南道至国展大道辅道）禁止机动车通行，社会车辆可绕行海河南道、辛柴路、国瑞路等道路。",
+      "char_start": 443,
+      "char_end": 520,
+      "road_names": [
+        "对宁静东辅道",
+        "海河南道至国展大道辅道",
+        "辛柴路",
+        "国瑞路等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_18242f5e7490349186db12ab",
+        "ext_3426872f38f872c22197b631"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_fce1dd40c0516cef1c28a84e",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "四、2026年10月26日6时至10月28日20时，国展大道（机场大道至东文南路路段）禁止一切货车通行，社会车辆可绕行东文南路、东沽路、南慧路（因道路施工，限高3.5米）、雅正路、津沽公路、机场大道（张满庄路）等道路。",
+      "char_start": 526,
+      "char_end": 635,
+      "road_names": [
+        "国展大道",
+        "机场大道至东文南路路",
+        "社会车辆可绕行东文南路",
+        "东沽路",
+        "南慧路",
+        "因道路",
+        "雅正路",
+        "津沽公路",
+        "机场大道",
+        "张满庄路",
+        "等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_586ec565e0620a2092029dc5",
+        "ext_ec060da2edf40c7ec8ee9394",
+        "ext_894d67fbf2e116fb30aaee2c"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_c00992f89ef5c8b6123832bd",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "五、展会期间，社会车辆可停放在国家会展中心南区P3、P4、P5、P6、P13停车场；国家会展中心北区P7、P9、P10、P11、P12以及国展大道临时停车场。",
+      "char_start": 637,
+      "char_end": 716,
+      "road_names": [
+        "P12以及国展大道"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_31e1e36dfd0721c045190235"
+      ],
+      "coverage_status": "matched"
+    }
+  ],
+  "matched_provisions": [
+    {
+      "candidate_id": "evd_7b57c177b0b70c806565d4ae",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "2026中国国际农业机械展览会（以下简称“农机展”）定于10月26日至10月28日在国家会展中心（天津）举办。为保证道路交通安全畅通，依据《中华人民共和国道路交通安全法》及相关法律法规规定，对国家会展中心（天津）周边部分道路采取以下交通管控措施：",
+      "char_start": 40,
+      "char_end": 163,
+      "road_names": [
+        "为保证道路",
+        "中华人民共和国道路",
+        "周边部分道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_1aa8684f7c198ff5a860ae71"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_df0a4598730f2840e0d11a23",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "一、2026年10月18日22时至10月29日22时，对国展大道（辛柴路至国瑞路段）主路、辅路双向禁止一切车辆通行（10月18日22时至10月26日6时持布撤展车证、10月26日6时至10月28日22时持农机展嘉宾大巴车辆通行证除外），社会车辆可绕行辛柴路、国瑞路、海河南道等道路。",
+      "char_start": 165,
+      "char_end": 306,
+      "road_names": [
+        "对国展大道",
+        "辛柴路至国瑞路",
+        "主路",
+        "辅路",
+        "社会车辆可绕行辛柴路",
+        "国瑞路",
+        "海河南道等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_791b2eb22d5f11153eed07c9",
+        "ext_6f52d9fd8e72f532a1f75e32",
+        "ext_103c6ed95f5a0a7887f06248"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_0fd8f1050f4154fac0c3081b",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "二、2026年10月26日至10月28日，每日7时至18时，视情对会展辅路（国瑞路至会展中心南登录大厅南门路段）、海河南道南侧辅道（宁静东辅道至国瑞路段）由西向东禁止机动车通行（持农机展车辆通行证以及制式出租车除外），社会车辆可绕行天津大道、辛柴路、海河南道等道路。",
+      "char_start": 308,
+      "char_end": 441,
+      "road_names": [
+        "视情对会展辅路",
+        "国瑞路至会展中心南登录大厅南门路",
+        "海河南道南侧辅道",
+        "宁静东辅道至国瑞路",
+        "社会车辆可绕行天津大道",
+        "辛柴路",
+        "海河南道等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_a63cbbc0c02a435a73ca12c6",
+        "ext_810f5f3af8f4f91024fb2c72",
+        "ext_51a395dba6bd3b92459601a1",
+        "ext_091a8280f77404d91fba3a37"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_830294565f73ccb2e523d589",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "三、2026年10月18日22时至10月28日18时，对宁静东辅道（海河南道至国展大道辅道）禁止机动车通行，社会车辆可绕行海河南道、辛柴路、国瑞路等道路。",
+      "char_start": 443,
+      "char_end": 520,
+      "road_names": [
+        "对宁静东辅道",
+        "海河南道至国展大道辅道",
+        "辛柴路",
+        "国瑞路等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_18242f5e7490349186db12ab",
+        "ext_3426872f38f872c22197b631"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_fce1dd40c0516cef1c28a84e",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "四、2026年10月26日6时至10月28日20时，国展大道（机场大道至东文南路路段）禁止一切货车通行，社会车辆可绕行东文南路、东沽路、南慧路（因道路施工，限高3.5米）、雅正路、津沽公路、机场大道（张满庄路）等道路。",
+      "char_start": 526,
+      "char_end": 635,
+      "road_names": [
+        "国展大道",
+        "机场大道至东文南路路",
+        "社会车辆可绕行东文南路",
+        "东沽路",
+        "南慧路",
+        "因道路",
+        "雅正路",
+        "津沽公路",
+        "机场大道",
+        "张满庄路",
+        "等道路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_586ec565e0620a2092029dc5",
+        "ext_ec060da2edf40c7ec8ee9394",
+        "ext_894d67fbf2e116fb30aaee2c"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_c00992f89ef5c8b6123832bd",
+      "section": "对相关道路采取交通管控措施的公告",
+      "text": "五、展会期间，社会车辆可停放在国家会展中心南区P3、P4、P5、P6、P13停车场；国家会展中心北区P7、P9、P10、P11、P12以及国展大道临时停车场。",
+      "char_start": 637,
+      "char_end": 716,
+      "road_names": [
+        "P12以及国展大道"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_31e1e36dfd0721c045190235"
+      ],
+      "coverage_status": "matched"
+    }
+  ],
+  "unmatched_provisions": [],
+  "coverage_rate": 1.0,
+  "needs_review": false,
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:44:09+00:00",
+  "source_text_sha256": "c1bc1b49c443552b5e59f3fc6072bcf50e6b64d96e76ddb3b9ab0ffd3a0c6234"
+}

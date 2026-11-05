@@ -1,0 +1,91 @@
+{
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:44:09+00:00",
+  "source_text_sha256": "c1bc1b49c443552b5e59f3fc6072bcf50e6b64d96e76ddb3b9ab0ffd3a0c6234",
+  "source_id": "src_fd3228f759d7e62004cadf23",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice07.txt",
+  "document_id": "src_fd3228f759d7e62004cadf23",
+  "source_length": 742,
+  "raw_count": 18,
+  "accepted_count": 15,
+  "rejected_count": 3,
+  "rejections": [
+    {
+      "reasons": [
+        "该文本不是发布机关"
+      ],
+      "located_text": "特此公告",
+      "extraction": {
+        "extraction_class": "issuing_authority",
+        "extraction_text": "特此公告",
+        "extraction_id": "ext_560b2b0ab23717106f4d1d08",
+        "evidence_id": "evd_63f136255211075aeb480b91",
+        "grounding_status": "exact",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 724,
+          "end_pos": 728
+        },
+        "alignment_status": "match_fuzzy",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null,
+        "source_id": "src_fd3228f759d7e62004cadf23"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "2026",
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "2026年10月",
+        "extraction_id": "ext_9f4600feb8e84dd304c124ac",
+        "evidence_id": "evd_79e23e85dec2564ba892c49a",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {
+          "precision": "month"
+        },
+        "char_interval": {
+          "start_pos": 40,
+          "end_pos": 44
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null,
+        "source_id": "src_fd3228f759d7e62004cadf23"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月18日22时至10月26日6时",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "2026年10月18日22时至10月26日6时",
+        "extraction_id": "ext_ff3de18dfebcdcf3184615bd",
+        "evidence_id": "evd_554ffd377af873f4dca29244",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 223,
+          "end_pos": 241
+        },
+        "alignment_status": "match_fuzzy",
+        "extraction_index": 4,
+        "group_index": 3,
+        "description": null,
+        "source_id": "src_fd3228f759d7e62004cadf23"
+      }
+    }
+  ]
+}

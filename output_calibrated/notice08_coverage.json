@@ -1,0 +1,350 @@
+{
+  "source_id": "src_159aacacd1b5adb6f6bd12d7",
+  "source_sections": [],
+  "candidate_provisions": [
+    {
+      "candidate_id": "evd_978433b96ba5b8a73336053d",
+      "section": "",
+      "text": "10月16日至18日，重庆奥体中心将举行演唱会。为保障活动期间奥体中心周边道路通行有序，预防交通事故发生，重庆市公安局九龙坡区分局交通管理支队将依法对奥体中心周边道路实施临时交通管制措施，请观演市民、驾车出行人员和周边居民提前安排行程。",
+      "char_start": 0,
+      "char_end": 118,
+      "road_names": [
+        "为保障活动期间奥体中心周边道路",
+        "局九龙坡区分局交通管理支队将依法对奥体中心周边道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_4a3eec78549dd3ed389fdbe3",
+        "ext_599d42c4cae76bf7b195bd34",
+        "ext_4870936600deb70536dceb19"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_b0f85879b1b72d548f76dc08",
+      "section": "",
+      "text": "交警预计，10月16日、17日、18日演唱会举行期间，每天进场高峰将主要集中在17:00至19:00，散场高峰将主要集中在21:30至23:00。建议观演市民尽量提前出发，散场时听从现场执勤人员引导，避免在管制路段逗留。",
+      "char_start": 120,
+      "char_end": 230,
+      "road_names": [
+        "避免在管制路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_5cabd567162bda01d17bb164",
+      "section": "",
+      "text": "10月15日17时至10月18日活动结束，奥体中心内部道路将对车辆进行清理，实行只出不进，活动结束后恢复。",
+      "char_start": 234,
+      "char_end": 287,
+      "road_names": [
+        "奥体中心内部道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_3bd1ad40ec87235b8947553c",
+        "ext_fa5b9e4d6d9e285e5bc2ae0a"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_b014683f5bee3d107a938909",
+      "section": "",
+      "text": "10月16日14时至10月18日活动结束，公安交管部门将对奥体中心管辖范围内的一支路、二支路、三支路、四支路、五支路实施封闭管理。除执勤车辆和持活动通行证车辆外，其他车辆不得进入。需要前往奥体四支路国网重庆奥体快速充电站、奥体中心内部的车辆将受到影响，请提前调整行程安排。",
+      "char_start": 289,
+      "char_end": 425,
+      "road_names": [
+        "公安交管部门将对奥体中心管辖范围内的一支路",
+        "二支路",
+        "三支路",
+        "四支路",
+        "五支路",
+        "需要前往奥体四支路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_69b674b0392ac54febdda01e",
+        "ext_caa0df92546d4c2531c7f979"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_bb7293dbdafccfaf81106e69",
+      "section": "",
+      "text": "10月16日至18日每日进散场高峰时段，公安交管部门将根据现场车流、人流情况，对奥林路、奥林一支路、奥林二支路、奥体东路中新城上城车库入口实施临时交通管制，禁止所有车辆通行，并对奥体路国宾上院路段道路中心开口实施临时封闭。",
+      "char_start": 427,
+      "char_end": 538,
+      "road_names": [
+        "对奥林路",
+        "奥林一支路",
+        "奥林二支路",
+        "奥体东路",
+        "并对奥体路国宾上院路段道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_5103b0272d321327f1c2741b",
+        "ext_472d9b05152e9a37e8587c3e"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_3da657cd263abcb2784cab37",
+      "section": "",
+      "text": "每日散场高峰时段，将根据现场情况对奥体三支路停车场、奥体五支路的路内停车泊位停放车辆实施临时交通管制，禁止停放车辆通行。在中新城上城停放的车辆，可从奥林路、奥体路出口驶出，经奥体路往袁家岗方向行驶。",
+      "char_start": 542,
+      "char_end": 641,
+      "road_names": [
+        "将根据现场情况对奥体三支路",
+        "奥体五支路的路",
+        "可从奥林路",
+        "奥体路",
+        "经奥体路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_c5de1919979dc38bc5d71ff2",
+        "ext_5d34fb97c95a93002d959579"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_beddc58d9ede211c9421d0eb",
+      "section": "",
+      "text": "此外，10月16日至18日每日进散场高峰时段，奥体路全线严禁停车上下客。",
+      "char_start": 643,
+      "char_end": 679,
+      "road_names": [
+        "奥体路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_b27b04b09868aa675f7b3ab9"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_c366a784b36361f352f44e85",
+      "section": "",
+      "text": "进场期间，市民可在龙腾大道上行轨道奥体中心公交车站、奥体东路金茂珑悦奥体中心公交车站临时上下客，车辆需即停即走，不得临停等候。",
+      "char_start": 681,
+      "char_end": 744,
+      "road_names": [
+        "市民可在龙腾大道",
+        "奥体东路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_dc0024e061d1f0543635acde"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_98db89666f54bf665b399abc",
+      "section": "",
+      "text": "散场期间，市民可在龙腾大道上行轨道奥体中心公交车站、龙腾大道下行轨道奥体中心公交车站、奥体东路金茂珑悦奥体中心公交车站、奥体东路奥体五支路口临时上下客，车辆同样需即停即走，不得临停等候。",
+      "char_start": 746,
+      "char_end": 839,
+      "road_names": [
+        "市民可在龙腾大道",
+        "龙腾大道",
+        "奥体东路",
+        "奥体东路奥体五支路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_a1c902ad54344a5e99d4a28f",
+      "section": "",
+      "text": "交警提醒，奥体中心周边停车资源有限，建议观演市民优先选择轨道交通、公交等公共交通方式前往。驾车途经奥体中心周边的市民，请提前绕行，服从现场执勤人员指挥。公安交管部门将根据现场车流、人流情况，适时采取其他临时管控措施。",
+      "char_start": 841,
+      "char_end": 949,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    }
+  ],
+  "matched_provisions": [
+    {
+      "candidate_id": "evd_978433b96ba5b8a73336053d",
+      "section": "",
+      "text": "10月16日至18日，重庆奥体中心将举行演唱会。为保障活动期间奥体中心周边道路通行有序，预防交通事故发生，重庆市公安局九龙坡区分局交通管理支队将依法对奥体中心周边道路实施临时交通管制措施，请观演市民、驾车出行人员和周边居民提前安排行程。",
+      "char_start": 0,
+      "char_end": 118,
+      "road_names": [
+        "为保障活动期间奥体中心周边道路",
+        "局九龙坡区分局交通管理支队将依法对奥体中心周边道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_4a3eec78549dd3ed389fdbe3",
+        "ext_599d42c4cae76bf7b195bd34",
+        "ext_4870936600deb70536dceb19"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_5cabd567162bda01d17bb164",
+      "section": "",
+      "text": "10月15日17时至10月18日活动结束，奥体中心内部道路将对车辆进行清理，实行只出不进，活动结束后恢复。",
+      "char_start": 234,
+      "char_end": 287,
+      "road_names": [
+        "奥体中心内部道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_3bd1ad40ec87235b8947553c",
+        "ext_fa5b9e4d6d9e285e5bc2ae0a"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_b014683f5bee3d107a938909",
+      "section": "",
+      "text": "10月16日14时至10月18日活动结束，公安交管部门将对奥体中心管辖范围内的一支路、二支路、三支路、四支路、五支路实施封闭管理。除执勤车辆和持活动通行证车辆外，其他车辆不得进入。需要前往奥体四支路国网重庆奥体快速充电站、奥体中心内部的车辆将受到影响，请提前调整行程安排。",
+      "char_start": 289,
+      "char_end": 425,
+      "road_names": [
+        "公安交管部门将对奥体中心管辖范围内的一支路",
+        "二支路",
+        "三支路",
+        "四支路",
+        "五支路",
+        "需要前往奥体四支路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_69b674b0392ac54febdda01e",
+        "ext_caa0df92546d4c2531c7f979"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_bb7293dbdafccfaf81106e69",
+      "section": "",
+      "text": "10月16日至18日每日进散场高峰时段，公安交管部门将根据现场车流、人流情况，对奥林路、奥林一支路、奥林二支路、奥体东路中新城上城车库入口实施临时交通管制，禁止所有车辆通行，并对奥体路国宾上院路段道路中心开口实施临时封闭。",
+      "char_start": 427,
+      "char_end": 538,
+      "road_names": [
+        "对奥林路",
+        "奥林一支路",
+        "奥林二支路",
+        "奥体东路",
+        "并对奥体路国宾上院路段道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_5103b0272d321327f1c2741b",
+        "ext_472d9b05152e9a37e8587c3e"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_3da657cd263abcb2784cab37",
+      "section": "",
+      "text": "每日散场高峰时段，将根据现场情况对奥体三支路停车场、奥体五支路的路内停车泊位停放车辆实施临时交通管制，禁止停放车辆通行。在中新城上城停放的车辆，可从奥林路、奥体路出口驶出，经奥体路往袁家岗方向行驶。",
+      "char_start": 542,
+      "char_end": 641,
+      "road_names": [
+        "将根据现场情况对奥体三支路",
+        "奥体五支路的路",
+        "可从奥林路",
+        "奥体路",
+        "经奥体路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_c5de1919979dc38bc5d71ff2",
+        "ext_5d34fb97c95a93002d959579"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_beddc58d9ede211c9421d0eb",
+      "section": "",
+      "text": "此外，10月16日至18日每日进散场高峰时段，奥体路全线严禁停车上下客。",
+      "char_start": 643,
+      "char_end": 679,
+      "road_names": [
+        "奥体路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_b27b04b09868aa675f7b3ab9"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_c366a784b36361f352f44e85",
+      "section": "",
+      "text": "进场期间，市民可在龙腾大道上行轨道奥体中心公交车站、奥体东路金茂珑悦奥体中心公交车站临时上下客，车辆需即停即走，不得临停等候。",
+      "char_start": 681,
+      "char_end": 744,
+      "road_names": [
+        "市民可在龙腾大道",
+        "奥体东路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_dc0024e061d1f0543635acde"
+      ],
+      "coverage_status": "matched"
+    }
+  ],
+  "unmatched_provisions": [
+    {
+      "candidate_id": "evd_b0f85879b1b72d548f76dc08",
+      "section": "",
+      "text": "交警预计，10月16日、17日、18日演唱会举行期间，每天进场高峰将主要集中在17:00至19:00，散场高峰将主要集中在21:30至23:00。建议观演市民尽量提前出发，散场时听从现场执勤人员引导，避免在管制路段逗留。",
+      "char_start": 120,
+      "char_end": 230,
+      "road_names": [
+        "避免在管制路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_98db89666f54bf665b399abc",
+      "section": "",
+      "text": "散场期间，市民可在龙腾大道上行轨道奥体中心公交车站、龙腾大道下行轨道奥体中心公交车站、奥体东路金茂珑悦奥体中心公交车站、奥体东路奥体五支路口临时上下客，车辆同样需即停即走，不得临停等候。",
+      "char_start": 746,
+      "char_end": 839,
+      "road_names": [
+        "市民可在龙腾大道",
+        "龙腾大道",
+        "奥体东路",
+        "奥体东路奥体五支路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_a1c902ad54344a5e99d4a28f",
+      "section": "",
+      "text": "交警提醒，奥体中心周边停车资源有限，建议观演市民优先选择轨道交通、公交等公共交通方式前往。驾车途经奥体中心周边的市民，请提前绕行，服从现场执勤人员指挥。公安交管部门将根据现场车流、人流情况，适时采取其他临时管控措施。",
+      "char_start": 841,
+      "char_end": 949,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    }
+  ],
+  "coverage_rate": 0.7,
+  "needs_review": true,
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:47:05+00:00",
+  "source_text_sha256": "340e35a1ade85c27f43698ab91d5f8705688544674f5d73d90bf759369392a1f"
+}

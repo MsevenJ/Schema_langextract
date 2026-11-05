@@ -1,0 +1,697 @@
+{
+  "source_id": "src_3703bae0353147c752ff50ba",
+  "source_sections": [
+    {
+      "text": "一、交通管制措施",
+      "char_start": 211,
+      "char_end": 219,
+      "level": 1
+    },
+    {
+      "text": "二、入场路线",
+      "char_start": 501,
+      "char_end": 507,
+      "level": 1
+    },
+    {
+      "text": "三、散场路线",
+      "char_start": 602,
+      "char_end": 609,
+      "level": 1
+    },
+    {
+      "text": "四、停车场设置",
+      "char_start": 766,
+      "char_end": 773,
+      "level": 1
+    },
+    {
+      "text": "五、公共交通",
+      "char_start": 909,
+      "char_end": 915,
+      "level": 1
+    },
+    {
+      "text": "六、出行提示",
+      "char_start": 1139,
+      "char_end": 1145,
+      "level": 1
+    }
+  ],
+  "candidate_provisions": [
+    {
+      "candidate_id": "evd_945aa3085f1e0fd206ebc33e",
+      "section": "",
+      "text": "“黄丽玲A-Lin歌迹Journey世界巡回演唱会-青岛站” 将于2026年10月17日、18日每日19时30分在青岛市民健身中心体育馆举行。为保障道路安全畅通，现将现场交通组织措施通告如下：",
+      "char_start": 113,
+      "char_end": 209,
+      "road_names": [
+        "为保障道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_45fac9bbd35a48d2d916a24b",
+        "ext_96e722bf156586ec5554cff5",
+        "ext_344b1a43261dbc8184f2b282"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a9373965815dffeb8e3d1701",
+      "section": "一、交通管制措施",
+      "text": "（一）2026年10月17日、18日8时至24时，敦信路（火炬路以南）实施交通管制措施，社会车辆禁止驶入。",
+      "char_start": 221,
+      "char_end": 274,
+      "road_names": [
+        "敦信路",
+        "火炬路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_9eda0ed9198f6b7539291394",
+        "ext_2d21986d97248199eb91b5fe"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_03914429053748f8c32cf991",
+      "section": "一、交通管制措施",
+      "text": "（二）2026年10月17日、18日8时至24时，敦信路火炬路路口北口实施交通管制措施，社会车辆禁止驶入。",
+      "char_start": 276,
+      "char_end": 329,
+      "road_names": [
+        "敦信路火炬路路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_fa3ba23a11374aaab0c9cef3"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_50db83131a49583f334acfda",
+      "section": "一、交通管制措施",
+      "text": "（三）2026年10月17日、18日16时至24时，火炬路（岙东路—龙海路）双向禁止中重型货车通行（视现场实际情况调整）。",
+      "char_start": 331,
+      "char_end": 392,
+      "road_names": [
+        "火炬路",
+        "岙东路",
+        "龙海路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_0e3ebd788dad01efc346dd5f",
+        "ext_23075baf5e8a26b5746ed83c"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a44b5b8b6c88684cb2454ee3",
+      "section": "一、交通管制措施",
+      "text": "（四）演唱会结束期间，健身中心门前拥堵时，视情况将火炬路（尚信路--田海路）西向东方向实施单向交通管制措施，社会车辆禁止驶入。西向东方向行驶的车辆，从火炬路尚信路路口左转至尚信路，沿田海路绕行至火炬路向东行驶。",
+      "char_start": 394,
+      "char_end": 499,
+      "road_names": [
+        "视情况将火炬路",
+        "尚信路",
+        "田海路",
+        "从火炬路尚信路路口左转至尚信路",
+        "沿田海路绕行至火炬路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_cbaef135da537c1092ab8a9f",
+        "ext_7334cb6c8b3e70638b3aa9dd"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_59a6b441cef76db307f9eeb0",
+      "section": "二、入场路线",
+      "text": "1、出发地—胶州湾大桥—华中路—火炬路—市民健身中心",
+      "char_start": 509,
+      "char_end": 535,
+      "road_names": [
+        "胶州湾大桥",
+        "华中路",
+        "火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_3027cb95ea2227e203bd9cea",
+      "section": "二、入场路线",
+      "text": "2、出发地—青兰高速—高新区出口—岙东路—火炬路—市民健身中心",
+      "char_start": 537,
+      "char_end": 568,
+      "road_names": [
+        "岙东路",
+        "火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_44d7de16d017c2233fa905fe",
+      "section": "二、入场路线",
+      "text": "3、出发地—青兰高速—河套出口—安和路—火炬路—市民健身中心",
+      "char_start": 570,
+      "char_end": 600,
+      "road_names": [
+        "安和路",
+        "火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_863a146ff8a2aba675741369",
+      "section": "三、散场路线",
+      "text": "1.车辆向西行驶可从火炬路转至安和路进青兰高速，也可从火炬路行驶至河套、胶州；向东行驶可从火炬路转至岙东路，也可从火炬路一直向东行驶至市区、城阳。",
+      "char_start": 611,
+      "char_end": 684,
+      "road_names": [
+        "车辆向西行驶可从火炬路转至安和路",
+        "也可从火炬路",
+        "向东行驶可从火炬路转至岙东路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_854f8812f3b5e3264d1405c4"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_44d69a645cbb33e1465ad179",
+      "section": "三、散场路线",
+      "text": "2.田海路（火炬路以北）车辆可经田海路、尚信路、振和路向东或西方向行驶进入火炬路。",
+      "char_start": 686,
+      "char_end": 727,
+      "road_names": [
+        "田海路",
+        "火炬路",
+        "车辆可经田海路",
+        "尚信路",
+        "振和路向东或西方向行驶进入火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_fc85e0a14a564b2dd964ac09",
+        "ext_250a141f89040fd73015e00e"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_269b29d180c0bf8d8880b206",
+      "section": "三、散场路线",
+      "text": "3.田海路（火炬路以南）车辆可从火炬路田海路路口左转或右转进入火炬路。",
+      "char_start": 729,
+      "char_end": 764,
+      "road_names": [
+        "田海路",
+        "火炬路",
+        "车辆可从火炬路田海路路口左转或右转进入火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_c310e6910e103e44c895054a",
+        "ext_215b5880daa8353a52aecd73"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_25e4c0cd243d0617a3ecc81b",
+      "section": "四、停车场设置",
+      "text": "（一）市民健身中心内部停车场；",
+      "char_start": 775,
+      "char_end": 790,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_3eb2e22f75222e59fcdbae28",
+      "section": "四、停车场设置",
+      "text": "（二）奥特莱斯及周边小路可停放社会车辆；",
+      "char_start": 792,
+      "char_end": 812,
+      "road_names": [
+        "奥特莱斯及周边小路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_d2d8772d1c18701c53efb1c7",
+      "section": "四、停车场设置",
+      "text": "（三）市民健身中心东停车场（2号地块）；",
+      "char_start": 814,
+      "char_end": 834,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_f031690d96410e34375a743b",
+      "section": "四、停车场设置",
+      "text": "（四）田海路一线道路两侧允许临时停放社会车辆；",
+      "char_start": 836,
+      "char_end": 859,
+      "road_names": [
+        "田海路一线道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_460536466f30ce1f9ed8f66a",
+      "section": "四、停车场设置",
+      "text": "（五）尚信路一线道路两侧允许临时停放社会车辆。",
+      "char_start": 861,
+      "char_end": 884,
+      "road_names": [
+        "尚信路一线道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_0ef5a728ef2b74637eee244f",
+      "section": "四、停车场设置",
+      "text": "火炬路（田海路-尚信路）双向禁止停车。",
+      "char_start": 886,
+      "char_end": 905,
+      "road_names": [
+        "火炬路",
+        "田海路",
+        "尚信路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_6673ef9a8b5f55db237e23a6"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_263a465a694e134f7e3df4aa",
+      "section": "五、公共交通",
+      "text": "因场馆周边道路条件所限，遇大流量时易导致车辆通行不畅，请大家尽可能选择公共交通出行。",
+      "char_start": 917,
+      "char_end": 959,
+      "road_names": [
+        "因场馆周边道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_fef63fda01ea94a727e60b3e",
+      "section": "五、公共交通",
+      "text": "1、地铁线路：观众可乘地铁8号线直达健身中心（红岛会展）站；也可乘地铁1号线或3号线至“青岛北站”，换乘地铁8号线至健身中心（红岛会展）站；从健身中心（红岛会展）站C出入口出站，沿火炬路向东步行，可到达青岛市民健身中心体育场北门。",
+      "char_start": 961,
+      "char_end": 1076,
+      "road_names": [
+        "地铁线路",
+        "沿火炬路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_39951b8762e0626e45180441"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_45f291c9751cc4a9c1440208",
+      "section": "五、公共交通",
+      "text": "2、P+R出行：开车的观众可将车辆停放至大洋、科技馆地铁站，乘坐8号线至健身中心（红岛会展）站，避免场馆周边交通拥堵。",
+      "char_start": 1078,
+      "char_end": 1137,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_b86e6a3c31ecb5de7a80a801"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_c9a244c47b9c05a2141cb46a",
+      "section": "六、出行提示",
+      "text": "请提前关注路况信息，合理安排出行路线和方式，途经车辆尽量绕行管制区域。演出期间，公安交管部门将根据现场交通流量情况，适时调整管控措施，驾车人员请配合现场工作人员指挥。管制期间带来不便，敬请谅解。",
+      "char_start": 1147,
+      "char_end": 1244,
+      "road_names": [
+        "请提前关注路",
+        "合理安排出行路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_b917cb1f1bd9a636adbc4c92"
+      ],
+      "coverage_status": "matched"
+    }
+  ],
+  "matched_provisions": [
+    {
+      "candidate_id": "evd_945aa3085f1e0fd206ebc33e",
+      "section": "",
+      "text": "“黄丽玲A-Lin歌迹Journey世界巡回演唱会-青岛站” 将于2026年10月17日、18日每日19时30分在青岛市民健身中心体育馆举行。为保障道路安全畅通，现将现场交通组织措施通告如下：",
+      "char_start": 113,
+      "char_end": 209,
+      "road_names": [
+        "为保障道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_45fac9bbd35a48d2d916a24b",
+        "ext_96e722bf156586ec5554cff5",
+        "ext_344b1a43261dbc8184f2b282"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a9373965815dffeb8e3d1701",
+      "section": "一、交通管制措施",
+      "text": "（一）2026年10月17日、18日8时至24时，敦信路（火炬路以南）实施交通管制措施，社会车辆禁止驶入。",
+      "char_start": 221,
+      "char_end": 274,
+      "road_names": [
+        "敦信路",
+        "火炬路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_9eda0ed9198f6b7539291394",
+        "ext_2d21986d97248199eb91b5fe"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_03914429053748f8c32cf991",
+      "section": "一、交通管制措施",
+      "text": "（二）2026年10月17日、18日8时至24时，敦信路火炬路路口北口实施交通管制措施，社会车辆禁止驶入。",
+      "char_start": 276,
+      "char_end": 329,
+      "road_names": [
+        "敦信路火炬路路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_fa3ba23a11374aaab0c9cef3"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_50db83131a49583f334acfda",
+      "section": "一、交通管制措施",
+      "text": "（三）2026年10月17日、18日16时至24时，火炬路（岙东路—龙海路）双向禁止中重型货车通行（视现场实际情况调整）。",
+      "char_start": 331,
+      "char_end": 392,
+      "road_names": [
+        "火炬路",
+        "岙东路",
+        "龙海路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_0e3ebd788dad01efc346dd5f",
+        "ext_23075baf5e8a26b5746ed83c"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a44b5b8b6c88684cb2454ee3",
+      "section": "一、交通管制措施",
+      "text": "（四）演唱会结束期间，健身中心门前拥堵时，视情况将火炬路（尚信路--田海路）西向东方向实施单向交通管制措施，社会车辆禁止驶入。西向东方向行驶的车辆，从火炬路尚信路路口左转至尚信路，沿田海路绕行至火炬路向东行驶。",
+      "char_start": 394,
+      "char_end": 499,
+      "road_names": [
+        "视情况将火炬路",
+        "尚信路",
+        "田海路",
+        "从火炬路尚信路路口左转至尚信路",
+        "沿田海路绕行至火炬路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_cbaef135da537c1092ab8a9f",
+        "ext_7334cb6c8b3e70638b3aa9dd"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_863a146ff8a2aba675741369",
+      "section": "三、散场路线",
+      "text": "1.车辆向西行驶可从火炬路转至安和路进青兰高速，也可从火炬路行驶至河套、胶州；向东行驶可从火炬路转至岙东路，也可从火炬路一直向东行驶至市区、城阳。",
+      "char_start": 611,
+      "char_end": 684,
+      "road_names": [
+        "车辆向西行驶可从火炬路转至安和路",
+        "也可从火炬路",
+        "向东行驶可从火炬路转至岙东路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_854f8812f3b5e3264d1405c4"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_44d69a645cbb33e1465ad179",
+      "section": "三、散场路线",
+      "text": "2.田海路（火炬路以北）车辆可经田海路、尚信路、振和路向东或西方向行驶进入火炬路。",
+      "char_start": 686,
+      "char_end": 727,
+      "road_names": [
+        "田海路",
+        "火炬路",
+        "车辆可经田海路",
+        "尚信路",
+        "振和路向东或西方向行驶进入火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_fc85e0a14a564b2dd964ac09",
+        "ext_250a141f89040fd73015e00e"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_269b29d180c0bf8d8880b206",
+      "section": "三、散场路线",
+      "text": "3.田海路（火炬路以南）车辆可从火炬路田海路路口左转或右转进入火炬路。",
+      "char_start": 729,
+      "char_end": 764,
+      "road_names": [
+        "田海路",
+        "火炬路",
+        "车辆可从火炬路田海路路口左转或右转进入火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_c310e6910e103e44c895054a",
+        "ext_215b5880daa8353a52aecd73"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_0ef5a728ef2b74637eee244f",
+      "section": "四、停车场设置",
+      "text": "火炬路（田海路-尚信路）双向禁止停车。",
+      "char_start": 886,
+      "char_end": 905,
+      "road_names": [
+        "火炬路",
+        "田海路",
+        "尚信路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_6673ef9a8b5f55db237e23a6"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_fef63fda01ea94a727e60b3e",
+      "section": "五、公共交通",
+      "text": "1、地铁线路：观众可乘地铁8号线直达健身中心（红岛会展）站；也可乘地铁1号线或3号线至“青岛北站”，换乘地铁8号线至健身中心（红岛会展）站；从健身中心（红岛会展）站C出入口出站，沿火炬路向东步行，可到达青岛市民健身中心体育场北门。",
+      "char_start": 961,
+      "char_end": 1076,
+      "road_names": [
+        "地铁线路",
+        "沿火炬路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_39951b8762e0626e45180441"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_45f291c9751cc4a9c1440208",
+      "section": "五、公共交通",
+      "text": "2、P+R出行：开车的观众可将车辆停放至大洋、科技馆地铁站，乘坐8号线至健身中心（红岛会展）站，避免场馆周边交通拥堵。",
+      "char_start": 1078,
+      "char_end": 1137,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_b86e6a3c31ecb5de7a80a801"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_c9a244c47b9c05a2141cb46a",
+      "section": "六、出行提示",
+      "text": "请提前关注路况信息，合理安排出行路线和方式，途经车辆尽量绕行管制区域。演出期间，公安交管部门将根据现场交通流量情况，适时调整管控措施，驾车人员请配合现场工作人员指挥。管制期间带来不便，敬请谅解。",
+      "char_start": 1147,
+      "char_end": 1244,
+      "road_names": [
+        "请提前关注路",
+        "合理安排出行路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_b917cb1f1bd9a636adbc4c92"
+      ],
+      "coverage_status": "matched"
+    }
+  ],
+  "unmatched_provisions": [
+    {
+      "candidate_id": "evd_59a6b441cef76db307f9eeb0",
+      "section": "二、入场路线",
+      "text": "1、出发地—胶州湾大桥—华中路—火炬路—市民健身中心",
+      "char_start": 509,
+      "char_end": 535,
+      "road_names": [
+        "胶州湾大桥",
+        "华中路",
+        "火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_3027cb95ea2227e203bd9cea",
+      "section": "二、入场路线",
+      "text": "2、出发地—青兰高速—高新区出口—岙东路—火炬路—市民健身中心",
+      "char_start": 537,
+      "char_end": 568,
+      "road_names": [
+        "岙东路",
+        "火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_44d7de16d017c2233fa905fe",
+      "section": "二、入场路线",
+      "text": "3、出发地—青兰高速—河套出口—安和路—火炬路—市民健身中心",
+      "char_start": 570,
+      "char_end": 600,
+      "road_names": [
+        "安和路",
+        "火炬路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_25e4c0cd243d0617a3ecc81b",
+      "section": "四、停车场设置",
+      "text": "（一）市民健身中心内部停车场；",
+      "char_start": 775,
+      "char_end": 790,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_3eb2e22f75222e59fcdbae28",
+      "section": "四、停车场设置",
+      "text": "（二）奥特莱斯及周边小路可停放社会车辆；",
+      "char_start": 792,
+      "char_end": 812,
+      "road_names": [
+        "奥特莱斯及周边小路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_d2d8772d1c18701c53efb1c7",
+      "section": "四、停车场设置",
+      "text": "（三）市民健身中心东停车场（2号地块）；",
+      "char_start": 814,
+      "char_end": 834,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_f031690d96410e34375a743b",
+      "section": "四、停车场设置",
+      "text": "（四）田海路一线道路两侧允许临时停放社会车辆；",
+      "char_start": 836,
+      "char_end": 859,
+      "road_names": [
+        "田海路一线道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_460536466f30ce1f9ed8f66a",
+      "section": "四、停车场设置",
+      "text": "（五）尚信路一线道路两侧允许临时停放社会车辆。",
+      "char_start": 861,
+      "char_end": 884,
+      "road_names": [
+        "尚信路一线道路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_263a465a694e134f7e3df4aa",
+      "section": "五、公共交通",
+      "text": "因场馆周边道路条件所限，遇大流量时易导致车辆通行不畅，请大家尽可能选择公共交通出行。",
+      "char_start": 917,
+      "char_end": 959,
+      "road_names": [
+        "因场馆周边道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    }
+  ],
+  "coverage_rate": 0.571429,
+  "needs_review": true,
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:35:41+00:00",
+  "source_text_sha256": "013fece3005782f6bd31cde5f3d7bb0a6f74cac92c69b0771b47662b52a795fe"
+}

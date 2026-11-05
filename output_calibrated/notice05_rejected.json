@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:35:41+00:00",
+  "source_text_sha256": "013fece3005782f6bd31cde5f3d7bb0a6f74cac92c69b0771b47662b52a795fe",
+  "source_id": "src_3703bae0353147c752ff50ba",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice05.txt",
+  "document_id": "src_3703bae0353147c752ff50ba",
+  "source_length": 1280,
+  "raw_count": 24,
+  "accepted_count": 21,
+  "rejected_count": 3,
+  "rejections": [
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "市民健身中心内部停车场；",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "市民健身中心内部停车场；奥特莱斯及周边小路可停放社会车辆；市民健身中心东停车场（2号地块）；田海路一线道路两侧允许临时停放社会车辆；尚信路一线道路两侧允许临时停放社会车辆。",
+        "extraction_id": "ext_31eae3799520a20ba4d8f400",
+        "evidence_id": "evd_a2e434e8124fc61e38738b70",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {
+          "guidance_type": "parking",
+          "route_or_location": "",
+          "time_text": "",
+          "vehicle_scope": "社会车辆",
+          "action": "",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 778,
+          "end_pos": 790
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 7,
+        "group_index": 6,
+        "description": null,
+        "source_id": "src_3703bae0353147c752ff50ba"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "市民健身中心内部停车场；",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "市民健身中心内部停车场；奥特莱斯及周边小路可停放社会车辆；市民健身中心东停车场（2号地块）；田海路一线道路两侧允许临时停放社会车辆；尚信路一线道路两侧允许临时停放社会车辆。",
+        "extraction_id": "ext_31eae3799520a20ba4d8f400",
+        "evidence_id": "evd_a2e434e8124fc61e38738b70",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {
+          "guidance_type": "parking",
+          "route_or_location": "",
+          "time_text": "",
+          "vehicle_scope": "社会车辆",
+          "action": "停放",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 778,
+          "end_pos": 790
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null,
+        "source_id": "src_3703bae0353147c752ff50ba"
+      }
+    },
+    {
+      "reasons": [
+        "与已保留结果重复或被更完整结果覆盖"
+      ],
+      "located_text": "火炬路（田海路-尚信路）双向禁止停车。",
+      "extraction": {
+        "extraction_class": "control_rule",
+        "extraction_text": "火炬路（田海路-尚信路）双向禁止停车。",
+        "extraction_id": "ext_6673ef9a8b5f55db237e23a6",
+        "evidence_id": "evd_0ef5a728ef2b74637eee244f",
+        "grounding_status": "exact",
+        "validation_status": "needs_review",
+        "attributes": {
+          "road_names": [
+            "火炬路"
+          ],
+          "road_range": "田海路-尚信路",
+          "direction": "双向",
+          "time_text": "",
+          "measure": "禁止停车",
+          "vehicle_scope": "",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": {
+          "start_pos": 886,
+          "end_pos": 905
+        },
+        "alignment_status": "match_exact",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null,
+        "source_id": "src_3703bae0353147c752ff50ba"
+      }
+    }
+  ]
+}

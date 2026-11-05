@@ -1,0 +1,30 @@
+{
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:44:09+00:00",
+  "source_text_sha256": "c1bc1b49c443552b5e59f3fc6072bcf50e6b64d96e76ddb3b9ab0ffd3a0c6234",
+  "source_id": "src_fd3228f759d7e62004cadf23",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice07.txt",
+  "response_count": 4,
+  "pass_errors": [],
+  "responses": [
+    {
+      "index": 1,
+      "content": "{\n  \"traffic_control_measures\": [\n    {\n      \"time_period\": \"2026年10月18日22时至10月29日22时\",\n      \"affected_roads\": \"国展大道（辛柴路至国瑞路段）主路、辅路\",\n      \"direction\": \"双向\",\n      \"exception\": \"10月18日22时至10月26日6时持布撤展车证、10月26日6时至10月28日22时持农机展嘉宾大巴车辆通行证\",\n      \"alternative_routes\": \"辛柴路、国瑞路、海河南道等道路\",\n      \"traffic_guidance\": \"社会车辆可绕行辛柴路、国瑞路、海河南道等道路\"\n    },\n    {\n      \"time_period\": \"2026年10月26日至10月28日，每日7时至18时\",\n      \"affected_roads\": \"会展辅路（国瑞路至会展中心南登录大厅南门路段）、海河南道南侧辅道（宁静东辅道至国瑞路段）\",\n      \"direction\": \"由西向东\",\n      \"exception\": \"持农机展车辆通行证以及制式出租车\",\n      \"alternative_routes\": \"天津大道、辛柴路、海河南道等道路\",\n      \"traffic_guidance\": \"社会车辆可绕行天津大道、辛柴路、海河南道等道路\"\n    },\n    {\n      \"time_period\": \"2026年10月18日22时至10月28日18时\",\n      \"affected_roads\": \"宁静东辅道（海河南道至国展大道辅道）\",\n      \"direction\": \"双向\",\n      \"exception\": \"\",\n      \"alternative_routes\": \"海河南道、辛柴路、国瑞路等道路\",\n      \"traffic_guidance\": \"社会车辆可绕行海河南道、辛柴路、国瑞路等道路\"\n    },\n    {\n      \"time_period\": \"2026年10月26日6时至10月28日20时\",\n      \"affected_roads\": \"国展大道（机场大道至东文南路路段）\",\n      \"direction\": \"双向\",\n      \"exception\": \"\",\n      \"alternative_routes\": \"东文南路、东沽路、南慧路（因道路施工，限高3.5米）、雅正路、津沽公路、机场大道（张满庄路）等道路\",\n      \"traffic_guidance\": \"社会车辆可绕行东文南路、东沽路、南慧路（因道路施工，限高3.5米）、雅正路、津沽公路、机场大道（张满庄路）等道路\"\n    },\n    {\n      \"time_period\": \"展会期间\",\n      \"affected_roads\": \"国家会展中心南区P3、P4、P5、P6、P13停车场；国家会展中心北区P7、P9、P10、P11、P12以及国展大道临时停车场\",\n      \"direction\": \"\",\n      \"exception\": \"\",\n      \"alternative_routes\": \"\",\n      \"traffic_guidance\": \"社会车辆可停放在国家会展中心南区P3、P4、P5、P6、P13停车场；国家会展中心北区P7、P9、P10、P11、P12以及国展大道临时停车场\"\n    }\n  ]\n}"
+    },
+    {
+      "index": 2,
+      "content": "{\n  \"extractions\": [\n    {\n      \"event_name\": \"2026中国国际农业机械展览会\",\n      \"event_name_attributes\": {}\n    },\n    {\n      \"event_venue\": \"国家会展中心（天津）\",\n      \"event_venue_attributes\": {}\n    },\n    {\n      \"event_time\": \"2026年10月26日至10月28日\",\n      \"event_time_attributes\": {}\n    }\n  ]\n}"
+    },
+    {
+      "index": 3,
+      "content": "{\n  \"extractions\": [\n    {\n      \"issuing_authority\": \"特此公告\",\n      \"issuing_authority_attributes\": {}\n    },\n    {\n      \"publication_date\": \"2026年10月\",\n      \"publication_date_attributes\": {\n        \"precision\": \"month\"\n      }\n    },\n    {\n      \"control_time\": \"2026年10月18日22时至10月29日22时\",\n      \"control_time_attributes\": {}\n    },\n    {\n      \"control_time\": \"2026年10月18日22时至10月26日6时\",\n      \"control_time_attributes\": {}\n    },\n    {\n      \"control_time\": \"2026年10月26日6时至10月28日20时\",\n      \"control_time_attributes\": {}\n    },\n    {\n      \"control_time\": \"2026年10月26日至10月28日，每日7时至18时\",\n      \"control_time_attributes\": {}\n    }\n  ]\n}"
+    },
+    {
+      "index": 4,
+      "content": "{\n  \"extractions\": [\n    {\n      \"control_rule\": \"国展大道（辛柴路至国瑞路段）主路、辅路双向禁止一切车辆通行（10月18日22时至10月26日6时持布撤展车证、10月26日6时至10月28日22时持农机展嘉宾大巴车辆通行证除外），社会车辆可绕行辛柴路、国瑞路、海河南道等道路。\",\n      \"control_rule_attributes\": {\n        \"road_names\": [\n          \"国展大道\"\n        ],\n        \"road_range\": \"辛柴路至国瑞路段\",\n        \"direction\": \"双向\",\n        \"time_text\": \"2026年10月18日22时至10月29日22时\",\n        \"measure\": \"禁止一切车辆通行\",\n        \"vehicle_scope\": \"一切车辆\",\n        \"condition\": \"10月18日22时至10月26日6时持布撤展车证、10月26日6时至10月28日22时持农机展嘉宾大巴车辆通行证除外\",\n        \"exception\": \"\"\n      }\n    },\n    {\n      \"control_rule\": \"会展辅路（国瑞路至会展中心南登录大厅南门路段）、海河南道南侧辅道（宁静东辅道至国瑞路段）由西向东禁止机动车通行（持农机展车辆通行证以及制式出租车除外），社会车辆可绕行天津大道、辛柴路、海河南道等道路。\",\n      \"control_rule_attributes\": {\n        \"road_names\": [\n          \"会展辅路\",\n          \"海河南道南侧辅道\"\n        ],\n        \"road_range\": \"国瑞路至会展中心南登录大厅南门路段、宁静东辅道至国瑞路段\",\n        \"direction\": \"由西向东\",\n        \"time_text\": \"2026年10月26日至10月28日，每日7时至18时\",\n        \"measure\": \"禁止机动车通行\",\n        \"vehicle_scope\": \"机动车\",\n        \"condition\": \"持农机展车辆通行证以及制式出租车除外\",\n        \"exception\": \"\"\n      }\n    },\n    {\n      \"control_rule\": \"宁静东辅道（海河南道至国展大道辅道）禁止机动车通行，社会车辆可绕行海河南道、辛柴路、国瑞路等道路。\",\n      \"control_rule_attributes\": {\n        \"road_names\": [\n          \"宁静东辅道\"\n        ],\n        \"road_range\": \"海河南道至国展大道辅道\",\n        \"direction\": \"\",\n        \"time_text\": \"2026年10月18日22时至10月28日18时\",\n        \"measure\": \"禁止机动车通行\",\n        \"vehicle_scope\": \"机动车\",\n        \"condition\": \"\",\n        \"exception\": \"\"\n      }\n    },\n    {\n      \"control_rule\": \"国展大道（机场大道至东文南路路段）禁止一切货车通行，社会车辆可绕行东文南路、东沽路、南慧路（因道路施工，限高3.5米）、雅正路、津沽公路、机场大道（张满庄路）等道路。\",\n      \"control_rule_attributes\": {\n        \"road_names\": [\n          \"国展大道\"\n        ],\n        \"road_range\": \"机场大道至东文南路路段\",\n        \"direction\": \"\",\n        \"time_text\": \"2026年10月26日6时至10月28日20时\",\n        \"measure\": \"禁止一切货车通行\",\n        \"vehicle_scope\": \"一切货车\",\n        \"condition\": \"\",\n        \"exception\": \"\"\n      }\n    }\n  ]\n}"
+    }
+  ]
+}

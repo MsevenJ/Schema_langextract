@@ -1,0 +1,155 @@
+{
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:40:12+00:00",
+  "source_text_sha256": "6dd2d52ac51184177fc652e67dc13b19a8672602ade8fd98b0039993b8bebb06",
+  "source_id": "src_eddb361ecbf84108f9f4bbf7",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice06.txt",
+  "document_id": "src_eddb361ecbf84108f9f4bbf7",
+  "source_length": 796,
+  "raw_count": 21,
+  "accepted_count": 16,
+  "rejected_count": 5,
+  "rejections": [
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "“动力火车",
+      "extraction": {
+        "extraction_class": "event_name",
+        "extraction_text": "“动力火车”一路向前”巡回演唱会",
+        "extraction_id": "ext_725c5a2af2c6fc6354a3485e",
+        "evidence_id": "evd_e9a5fa9bdd2972a48cdbd069",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 80,
+          "end_pos": 85
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null,
+        "source_id": "src_eddb361ecbf84108f9f4bbf7"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "玉环市",
+      "extraction": {
+        "extraction_class": "issuing_authority",
+        "extraction_text": "玉环市公安局交通警察大队",
+        "extraction_id": "ext_84655d1058b05793017379b1",
+        "evidence_id": "evd_2ddf1db1eb84f3886e5a1517",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 3,
+          "end_pos": 6
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 1,
+        "group_index": 0,
+        "description": null,
+        "source_id": "src_eddb361ecbf84108f9f4bbf7"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "2026年10月",
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "2026年10月14日",
+        "extraction_id": "ext_ec23b0183a04163e25c93a66",
+        "evidence_id": "evd_9889fd4d311df4405ba7b630",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {
+          "precision": "day"
+        },
+        "char_interval": {
+          "start_pos": 69,
+          "end_pos": 77
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null,
+        "source_id": "src_eddb361ecbf84108f9f4bbf7"
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_rule",
+        "extraction_text": "外环岛路科园桥到滨江大道禁止车辆驶入。",
+        "extraction_id": "ext_df74d4de22600f786bbc10ca",
+        "evidence_id": "evd_062c4c70f96787c5d41badf1",
+        "grounding_status": "mismatch",
+        "validation_status": "accepted",
+        "attributes": {
+          "road_names": [
+            "外环岛路"
+          ],
+          "road_range": "科园桥到滨江大道",
+          "direction": "",
+          "time_text": "21:30—23:00",
+          "measure": "禁止车辆驶入",
+          "vehicle_scope": "车辆",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 11,
+        "group_index": 10,
+        "description": null,
+        "source_id": "src_eddb361ecbf84108f9f4bbf7"
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_rule",
+        "extraction_text": "外环岛路肾病医院路口到滨江大道禁止车辆驶入。",
+        "extraction_id": "ext_df74d4de22600f786bbc10ca",
+        "evidence_id": "evd_062c4c70f96787c5d41badf1",
+        "grounding_status": "mismatch",
+        "validation_status": "accepted",
+        "attributes": {
+          "road_names": [
+            "外环岛路"
+          ],
+          "road_range": "肾病医院路口到滨江大道",
+          "direction": "",
+          "time_text": "21:30—23:00",
+          "measure": "禁止车辆驶入",
+          "vehicle_scope": "车辆",
+          "condition": "",
+          "exception": ""
+        },
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 12,
+        "group_index": 11,
+        "description": null,
+        "source_id": "src_eddb361ecbf84108f9f4bbf7"
+      }
+    }
+  ]
+}

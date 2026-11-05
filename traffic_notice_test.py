@@ -13,7 +13,7 @@ import argparse
 from collections import Counter
 import copy
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import json
 import os
 from pathlib import Path
@@ -21,6 +21,32 @@ import re
 import subprocess
 import sys
 from typing import Any
+
+from traffic_schema.coverage import audit_coverage, save_coverage_report
+from traffic_schema.grounding import (
+    GROUNDING_EXACT,
+    GROUNDING_MISMATCH,
+    GROUNDING_WHITESPACE_NORMALIZED,
+    compare_grounding,
+)
+from traffic_schema.ids import (
+    build_run_metadata,
+    evidence_id,
+    extraction_id as make_extraction_id,
+)
+from traffic_schema.kg_export import export_kg
+from traffic_schema.review_export import build_review_rows, write_review_queue
+from traffic_schema.time_binding import (
+    extract_literal_time,
+    find_inheritable_time,
+    is_web_metadata_time,
+)
+from traffic_schema.validation import (
+    control_measure_status,
+    extract_exception_text,
+    is_mandatory_control,
+    separate_vehicle_scope_and_exception,
+)
 
 
 for stream in (sys.stdout, sys.stderr):
@@ -46,6 +72,7 @@ except ModuleNotFoundError:
 
 
 SCHEMA_VERSION = "2.0"
+PROMPT_VERSION = "2.1.0"
 
 EXTRACTION_CLASSES = (
     "issuing_authority",
@@ -1182,6 +1209,11 @@ def parse_args() -> argparse.Namespace:
         default=int(os.getenv("OLLAMA_TIMEOUT", "600")),
         help="单次 Ollama 请求超时秒数，默认为 600。",
     )
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        help="可选 JSON/CSV 清单，用 file_name 映射人工指定的 event_id。",
+    )
     return parser.parse_args()
 
 
@@ -1241,27 +1273,13 @@ def validate_extraction(
             reasons.append("control_rule.time_text 必须是字符串")
         elif time_text and time_text not in source_text:
             reasons.append("control_rule.time_text 未在原文出现")
-        if not any(
-            marker in (extraction_text or "")
-            for marker in (
-                "禁止",
-                "封闭",
-                "管制",
-                "限行",
-                "单向通行",
-                "只出不进",
-                "严禁",
-            )
-        ):
-            reasons.append("control_rule 不包含强制性交通管理措施")
+        # Uncertain control semantics are retained for human review.  Only
+        # grounding/schema failures are hard rejections here.
     if extraction.extraction_class == "traffic_guidance":
         guidance_type = attributes.get("guidance_type")
         if guidance_type not in GUIDANCE_TYPES:
             reasons.append("traffic_guidance.guidance_type 不在允许列表中")
-        if any(
-            marker in (extraction_text or "")
-            for marker in ("禁止通行", "禁止驶入", "封闭", "严禁停车", "车辆限行")
-        ):
+        if is_mandatory_control(extraction_text or ""):
             reasons.append("强制性道路管制不能归入 traffic_guidance")
         time_text = attributes.get("time_text")
         if not isinstance(time_text, str):
@@ -1289,7 +1307,8 @@ def validate_extraction(
         reasons.append("定位区间超出原文范围")
     else:
         located_text = source_text[start:end]
-        if located_text != extraction_text:
+        grounding_status = compare_grounding(extraction_text or "", located_text)
+        if grounding_status == GROUNDING_MISMATCH:
             reasons.append("定位出的原文与 extraction_text 不一致")
         context_prefix = source_text[max(0, start - 16) : start]
         if extraction.extraction_class == "issuing_authority" and any(
@@ -1311,6 +1330,18 @@ def serialize_extraction(extraction: lx.data.Extraction) -> dict[str, Any]:
     return {
         "extraction_class": extraction.extraction_class,
         "extraction_text": extraction.extraction_text,
+        "extraction_id": getattr(extraction, "_extraction_id", ""),
+        "evidence_id": getattr(extraction, "_evidence_id", ""),
+        "grounding_status": getattr(
+            extraction,
+            "_grounding_status",
+            GROUNDING_MISMATCH,
+        ),
+        "validation_status": getattr(
+            extraction,
+            "_validation_status",
+            "rejected",
+        ),
         "attributes": extraction.attributes or {},
         "char_interval": (
             {
@@ -1349,23 +1380,7 @@ def infer_guidance_type(extraction_text: str) -> str:
 
 def is_strict_control_text(extraction_text: str) -> bool:
     """Distinguish mandatory road controls from advisory traffic guidance."""
-    return any(
-        marker in extraction_text
-        for marker in (
-            "禁止",
-            "不得进入",
-            "封闭",
-            "限行",
-            "单向通行",
-            "单向交通",
-            "只出不进",
-            "严禁停车",
-            "实施交通管制",
-            "实施临时交通管制",
-            "临时交通管理措施",
-            "临时交通控流",
-        )
-    )
+    return is_mandatory_control(extraction_text)
 
 
 def normalize_extraction_attributes(
@@ -1450,9 +1465,16 @@ def normalize_extraction_attributes(
                     attributes["condition"] = match.group(0)
                     break
         if not attributes["exception"]:
-            exception_match = re.search(r"除[^。；]+?外", normalized.extraction_text)
-            if exception_match:
-                attributes["exception"] = exception_match.group(0)
+            attributes["exception"] = extract_exception_text(
+                normalized.extraction_text
+            )
+        (
+            attributes["vehicle_scope"],
+            attributes["exception"],
+        ) = separate_vehicle_scope_and_exception(
+            attributes["vehicle_scope"],
+            attributes["exception"],
+        )
         attributes = {
             key: attributes[key]
             for key in CONTROL_RULE_ATTRIBUTE_KEYS
@@ -1505,7 +1527,7 @@ def repair_grounding_from_source(
     extraction: lx.data.Extraction,
     source_text: str,
 ) -> lx.data.Extraction | None:
-    """Repair only unambiguous alignment or terminal-punctuation differences."""
+    """Repair exact/whitespace grounding without changing factual content."""
     extraction_text = extraction.extraction_text
     interval = extraction.char_interval
     if (
@@ -1517,7 +1539,31 @@ def repair_grounding_from_source(
     ):
         return None
 
-    # If the exact text occurs only once, correcting the interval is safe.
+    start = interval.start_pos
+    end = interval.end_pos
+    if 0 <= start < end <= len(source_text):
+        located_text = source_text[start:end]
+        grounding_status = compare_grounding(extraction_text, located_text)
+        if grounding_status in {
+            GROUNDING_EXACT,
+            GROUNDING_WHITESPACE_NORMALIZED,
+        }:
+            repaired = copy.deepcopy(extraction)
+            repaired.extraction_text = located_text
+            previous_status = getattr(extraction, "_grounding_status", "")
+            setattr(
+                repaired,
+                "_grounding_status",
+                (
+                    GROUNDING_WHITESPACE_NORMALIZED
+                    if previous_status == GROUNDING_WHITESPACE_NORMALIZED
+                    else grounding_status
+                ),
+            )
+            return repaired
+
+    # If the exact text occurs only once, correcting an inaccurate interval is
+    # safe. Missing intervals remain rejected by design.
     exact_start = source_text.find(extraction_text)
     if exact_start >= 0 and source_text.find(extraction_text, exact_start + 1) < 0:
         repaired = copy.deepcopy(extraction)
@@ -1525,10 +1571,9 @@ def repair_grounding_from_source(
             start_pos=exact_start,
             end_pos=exact_start + len(extraction_text),
         )
+        setattr(repaired, "_grounding_status", GROUNDING_EXACT)
         return repaired
 
-    start = interval.start_pos
-    end = interval.end_pos
     if not (0 <= start < end <= len(source_text)):
         return None
 
@@ -1547,6 +1592,7 @@ def repair_grounding_from_source(
             start_pos=start,
             end_pos=end + 1,
         )
+        setattr(repaired, "_grounding_status", GROUNDING_EXACT)
         return repaired
 
     return None
@@ -1673,69 +1719,16 @@ def complete_control_rule_from_source(
     return repaired
 
 
-INLINE_TIME_PATTERNS = tuple(
-    re.compile(pattern)
-    for pattern in (
-        r"(?:展会期间|演出期间|活动期间)?(?:每天|每日)\d{1,2}(?::\d{2}|时(?:\d{1,2}分)?)[-—至]\d{1,2}(?::\d{2}|时(?:\d{1,2}分)?)",
-        r"(?:\d{4}年)?\d{1,2}月\d{1,2}日[^，。；：\n]{0,35}(?:至|—|-)[^，。；：\n]{1,30}",
-        r"(?:每天|每日)?\d{1,2}时(?:\d{1,2}分)?(?:至|—|-)\d{1,2}时(?:\d{1,2}分)?",
-        r"(?:进场|散场|离场|演唱会结束|展会|活动)期间(?:（[^）]{1,30}）)?",
-        r"(?:每日|每天)?(?:进场|散场|进散场)高峰时段",
-    )
-)
-
-
 def extract_time_text_from_context(text: str) -> str:
     """Return one literal time phrase from source context, without conversion."""
-    for group in re.findall(r"[（(]([^（）()]{1,50})[）)]", text):
-        if any(marker in group for marker in ("时", ":", "期间", "时段")):
-            return group.strip()
-
-    if "时间：" in text:
-        value = text.split("时间：", 1)[1].strip(" \t；;。")
-        if value:
-            return value
-
-    for pattern in INLINE_TIME_PATTERNS:
-        match = pattern.search(text)
-        if match:
-            return match.group(0)
-
-    prefix = re.split(r"[，,；;。]", text, maxsplit=1)[0].strip()
-    if len(prefix) <= 70 and any(
-        marker in prefix
-        for marker in ("年", "月", "日", "时", "期间", "时段", "活动结束")
-    ):
-        if any(character.isdigit() for character in prefix) or "期间" in prefix:
-            return prefix
-    return ""
+    return extract_literal_time(text)
 
 
 def find_heading_time_text(
     source_text: str,
     rule_start: int,
 ) -> str:
-    context_start = max(0, rule_start - 500)
-    preceding = source_text[context_start:rule_start]
-    lines = [line.strip() for line in preceding.splitlines() if line.strip()]
-    for reverse_index, line in enumerate(reversed(lines[-8:])):
-        if any(
-            marker in line
-            for marker in ("进场", "散场", "离场", "管制", "禁行", "时间：")
-        ):
-            time_text = extract_time_text_from_context(line)
-            if time_text:
-                return time_text
-        if reverse_index + 1 < len(lines[-8:]):
-            prior_line = lines[-8:][-(reverse_index + 2)]
-            if any(
-                marker in prior_line
-                for marker in ("管控时段", "管制时间", "禁行时间", "禁止通行时间")
-            ):
-                time_text = extract_time_text_from_context(line)
-                if time_text:
-                    return time_text
-    return ""
+    return find_inheritable_time(source_text, rule_start)
 
 
 def bind_control_rule_time(
@@ -1749,8 +1742,14 @@ def bind_control_rule_time(
 
     attributes = dict(bound.attributes or {})
     current = attributes.get("time_text", "")
-    if isinstance(current, str) and current and current in source_text:
+    if (
+        isinstance(current, str)
+        and current
+        and current in source_text
+        and not is_web_metadata_time(source_text, current)
+    ):
         return bound
+    attributes["time_text"] = ""
 
     time_text = extract_time_text_from_context(bound.extraction_text)
     interval = bound.char_interval
@@ -1831,6 +1830,16 @@ def split_extractions(
 
     for extraction, normalized in zip(extractions, normalized_extractions):
         candidate = normalized
+        # Normalize an already-correct interval before attempting to complete a
+        # rule from line boundaries. This preserves multi-line source evidence.
+        initial_grounded = repair_grounding_from_source(candidate, source_text)
+        if initial_grounded is not None:
+            if (
+                getattr(initial_grounded, "_grounding_status", GROUNDING_EXACT)
+                == GROUNDING_WHITESPACE_NORMALIZED
+            ):
+                repaired_count += 1
+            candidate = initial_grounded
         completed_rule = complete_control_rule_from_source(
             candidate,
             source_text,
@@ -1845,6 +1854,47 @@ def split_extractions(
                 source_text,
                 control_times,
             )
+            status = control_measure_status(candidate.extraction_text)
+            has_bound_time = bool(
+                (candidate.attributes or {}).get("time_text", "")
+            )
+            setattr(
+                candidate,
+                "_validation_status",
+                (
+                    "accepted"
+                    if status == "mandatory" and has_bound_time
+                    else "needs_review"
+                ),
+            )
+
+        original_interval = candidate.char_interval
+        original_start = (
+            original_interval.start_pos if original_interval is not None else None
+        )
+        original_end = (
+            original_interval.end_pos if original_interval is not None else None
+        )
+        original_grounding_status = getattr(candidate, "_grounding_status", "")
+        grounded = repair_grounding_from_source(candidate, source_text)
+        if grounded is not None:
+            grounded_interval = grounded.char_interval
+            grounding_changed = (
+                grounded.extraction_text != candidate.extraction_text
+                or (
+                    getattr(grounded, "_grounding_status", GROUNDING_EXACT)
+                    == GROUNDING_WHITESPACE_NORMALIZED
+                    and original_grounding_status
+                    != GROUNDING_WHITESPACE_NORMALIZED
+                )
+                or (grounded_interval.start_pos if grounded_interval else None)
+                != original_start
+                or (grounded_interval.end_pos if grounded_interval else None)
+                != original_end
+            )
+            candidate = grounded
+            if grounding_changed:
+                repaired_count += 1
 
         reasons, located_text = validate_extraction(candidate, source_text)
         if reasons:
@@ -1878,7 +1928,7 @@ def split_extractions(
                 {
                     "reasons": reasons,
                     "located_text": located_text,
-                    "extraction": serialize_extraction(extraction),
+                    "extraction": serialize_extraction(candidate),
                 }
             )
         else:
@@ -1892,9 +1942,10 @@ def make_document(
     result: lx.data.AnnotatedDocument,
     source_text: str,
     extractions: list[lx.data.Extraction],
+    document_id: str | None = None,
 ) -> lx.data.AnnotatedDocument:
     return lx.data.AnnotatedDocument(
-        document_id=result.document_id,
+        document_id=document_id or result.document_id,
         text=source_text,
         extractions=extractions,
     )
@@ -1905,6 +1956,7 @@ def save_model_responses(
     input_path: Path,
     output_dir: Path,
     pass_errors: list[str] | None = None,
+    run_metadata: dict[str, Any] | None = None,
 ) -> Path | None:
     if not format_handler.raw_responses and not pass_errors:
         return None
@@ -1912,7 +1964,7 @@ def save_model_responses(
     output_dir.mkdir(parents=True, exist_ok=True)
     path = output_dir / f"{input_path.stem}_model_responses.json"
     payload = {
-        "schema_version": SCHEMA_VERSION,
+        **(run_metadata or {"schema_version": SCHEMA_VERSION}),
         "input_file": str(input_path.resolve()),
         "response_count": len(format_handler.raw_responses),
         "pass_errors": pass_errors or [],
@@ -1931,13 +1983,46 @@ def save_model_responses(
     return path
 
 
-def add_schema_version_to_jsonl(path: Path) -> None:
+def add_run_metadata_to_jsonl(
+    path: Path,
+    run_metadata: dict[str, Any],
+    source_text: str,
+    extractions: list[lx.data.Extraction],
+) -> None:
     versioned_lines = []
     for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
         payload = json.loads(line)
-        payload = {"schema_version": SCHEMA_VERSION, **payload}
+        payload = {**run_metadata, **payload}
+        for item, extraction in zip(payload.get("extractions", []), extractions):
+            interval = extraction.char_interval
+            start = interval.start_pos if interval is not None else None
+            end = interval.end_pos if interval is not None else None
+            stable_extraction_id = make_extraction_id(
+                run_metadata["source_id"],
+                extraction.extraction_class,
+                start,
+                end,
+            )
+            stable_evidence_id = evidence_id(
+                run_metadata["source_id"],
+                start,
+                end,
+            )
+            item["source_id"] = run_metadata["source_id"]
+            item["extraction_id"] = stable_extraction_id
+            item["evidence_id"] = stable_evidence_id
+            item["grounding_status"] = getattr(
+                extraction,
+                "_grounding_status",
+                GROUNDING_MISMATCH,
+            )
+            item["validation_status"] = getattr(
+                extraction,
+                "_validation_status",
+                "raw",
+            )
         versioned_lines.append(json.dumps(payload, ensure_ascii=False))
     path.write_text("\n".join(versioned_lines) + "\n", encoding="utf-8")
 
@@ -1950,6 +2035,7 @@ def save_results(
     rejected: list[dict[str, Any]],
     input_path: Path,
     output_dir: Path,
+    run_metadata: dict[str, Any],
 ) -> dict[str, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     prefix = input_path.stem
@@ -1960,8 +2046,19 @@ def save_results(
         "visualization": output_dir / f"{prefix}_visualization.html",
     }
 
-    raw_document = make_document(result, source_text, all_extractions)
-    accepted_document = make_document(result, source_text, accepted)
+    stable_document_id = run_metadata["source_id"]
+    raw_document = make_document(
+        result,
+        source_text,
+        all_extractions,
+        document_id=stable_document_id,
+    )
+    accepted_document = make_document(
+        result,
+        source_text,
+        accepted,
+        document_id=stable_document_id,
+    )
     lx.io.save_annotated_documents(
         [raw_document],
         output_name=paths["raw"].name,
@@ -1974,13 +2071,17 @@ def save_results(
         output_dir=output_dir,
         show_progress=False,
     )
-    add_schema_version_to_jsonl(paths["raw"])
-    add_schema_version_to_jsonl(paths["accepted"])
+    add_run_metadata_to_jsonl(
+        paths["raw"], run_metadata, source_text, all_extractions
+    )
+    add_run_metadata_to_jsonl(
+        paths["accepted"], run_metadata, source_text, accepted
+    )
 
     rejected_payload = {
-        "schema_version": SCHEMA_VERSION,
+        **run_metadata,
         "input_file": str(input_path.resolve()),
-        "document_id": result.document_id,
+        "document_id": stable_document_id,
         "source_length": len(source_text),
         "raw_count": len(all_extractions),
         "accepted_count": len(accepted),
@@ -2050,6 +2151,76 @@ def print_summary(
         print(f"  {category}: {counts[category]}")
 
 
+def load_event_manifest(path: Path | None) -> dict[str, str]:
+    """Load optional file_name -> event_id mappings without inferring IDs."""
+    if path is None:
+        return {}
+    path = path.resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"找不到 event manifest：{path}")
+    mappings: dict[str, str] = {}
+    if path.suffix.casefold() == ".json":
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        entries = payload.get("events", payload) if isinstance(payload, dict) else payload
+        if isinstance(entries, dict):
+            for file_name, event_id_value in entries.items():
+                if isinstance(event_id_value, str) and event_id_value:
+                    mappings[str(file_name).casefold()] = event_id_value
+        elif isinstance(entries, list):
+            for entry in entries:
+                if not isinstance(entry, dict):
+                    continue
+                file_name = entry.get("file_name")
+                event_id_value = entry.get("event_id")
+                if isinstance(file_name, str) and isinstance(event_id_value, str):
+                    mappings[file_name.casefold()] = event_id_value
+        return mappings
+    with path.open("r", encoding="utf-8-sig", newline="") as file_handle:
+        for row in csv.DictReader(file_handle):
+            file_name = (row.get("file_name") or "").strip()
+            event_id_value = (row.get("event_id") or "").strip()
+            if file_name and event_id_value:
+                mappings[file_name.casefold()] = event_id_value
+    return mappings
+
+
+def annotate_extraction_identity(
+    extraction: lx.data.Extraction,
+    source_text: str,
+    stable_source_id: str,
+    *,
+    default_validation_status: str,
+) -> None:
+    interval = extraction.char_interval
+    start = interval.start_pos if interval is not None else None
+    end = interval.end_pos if interval is not None else None
+    setattr(
+        extraction,
+        "_extraction_id",
+        make_extraction_id(
+            stable_source_id,
+            extraction.extraction_class,
+            start,
+            end,
+        ),
+    )
+    setattr(extraction, "_evidence_id", evidence_id(stable_source_id, start, end))
+    if not hasattr(extraction, "_grounding_status"):
+        grounding_status = GROUNDING_MISMATCH
+        if (
+            isinstance(start, int)
+            and isinstance(end, int)
+            and 0 <= start < end <= len(source_text)
+        ):
+            grounding_status = compare_grounding(
+                extraction.extraction_text,
+                source_text[start:end],
+            )
+        setattr(extraction, "_grounding_status", grounding_status)
+    if not hasattr(extraction, "_validation_status"):
+        setattr(extraction, "_validation_status", default_validation_status)
+
+
 @dataclass
 class NoticeRunStats:
     input_path: Path
@@ -2058,6 +2229,9 @@ class NoticeRunStats:
     rejected_count: int
     repaired_count: int
     category_counts: Counter[str]
+    coverage_rate: float = 0.0
+    unmatched_count: int = 0
+    review_rows: list[dict[str, Any]] = field(default_factory=list)
     status: str = "success"
     error: str = ""
 
@@ -2070,6 +2244,17 @@ def process_notice(
     print_details: bool,
 ) -> NoticeRunStats:
     notice_text = read_notice(input_path)
+    run_metadata = build_run_metadata(
+        schema_version=SCHEMA_VERSION,
+        prompt_version=PROMPT_VERSION,
+        model_name=args.model,
+        ollama_url=args.ollama_url,
+        input_path=input_path,
+        source_text=notice_text,
+    )
+    stable_source_id = run_metadata["source_id"]
+    event_manifest = getattr(args, "event_manifest", {})
+    event_id_value = event_manifest.get(input_path.name.casefold(), "")
     response_format_handler = TrafficNoticeFormatHandler()
 
     # Keep provider selection explicit so no cloud provider can be chosen.
@@ -2212,6 +2397,7 @@ def process_notice(
         input_path,
         output_dir,
         pass_errors,
+        run_metadata,
     )
     if not successful_results:
         detail = "；".join(pass_errors) or "未知错误"
@@ -2226,6 +2412,66 @@ def process_notice(
         all_extractions,
         notice_text,
     )
+    for extraction in all_extractions:
+        annotate_extraction_identity(
+            extraction,
+            notice_text,
+            stable_source_id,
+            default_validation_status="raw",
+        )
+    for extraction in accepted:
+        annotate_extraction_identity(
+            extraction,
+            notice_text,
+            stable_source_id,
+            default_validation_status="accepted",
+        )
+    for item in rejected:
+        serialized = item.get("extraction", {})
+        interval = serialized.get("char_interval") or {}
+        start = interval.get("start_pos")
+        end = interval.get("end_pos")
+        serialized["source_id"] = stable_source_id
+        serialized["extraction_id"] = make_extraction_id(
+            stable_source_id,
+            serialized.get("extraction_class", ""),
+            start,
+            end,
+        )
+        serialized["evidence_id"] = evidence_id(
+            stable_source_id,
+            start,
+            end,
+        )
+
+    coverage_report = audit_coverage(
+        notice_text,
+        accepted,
+        stable_source_id,
+    )
+    coverage_report.update(run_metadata)
+    coverage_path = save_coverage_report(
+        coverage_report,
+        output_dir / f"{input_path.stem}_coverage.json",
+    )
+    review_rows = build_review_rows(
+        event_id_value=event_id_value,
+        stable_source_id=stable_source_id,
+        file_name=input_path.name,
+        accepted=accepted,
+        rejected=rejected,
+        coverage_report=coverage_report,
+    )
+    notice_review_path = write_review_queue(
+        review_rows,
+        output_dir / f"{input_path.stem}_review.csv",
+    )
+    kg_paths = export_kg(
+        output_dir=output_dir / "kg_export",
+        stable_source_id=stable_source_id,
+        event_id_value=event_id_value,
+        accepted=accepted,
+    )
     paths = save_results(
         result=result,
         source_text=notice_text,
@@ -2234,6 +2480,7 @@ def process_notice(
         rejected=rejected,
         input_path=input_path,
         output_dir=output_dir,
+        run_metadata=run_metadata,
     )
 
     if print_details:
@@ -2260,6 +2507,9 @@ def process_notice(
         print(f"  可视化：{paths['visualization'].resolve()}")
         if model_response_path is not None:
             print(f"  模型原始回复：{model_response_path.resolve()}")
+        print(f"  覆盖审计：{coverage_path.resolve()}")
+        print(f"  单篇复核表：{notice_review_path.resolve()}")
+        print(f"  KG 导出目录：{next(iter(kg_paths.values())).parent.resolve()}")
 
     counts = Counter(item.extraction_class for item in accepted)
     return NoticeRunStats(
@@ -2269,6 +2519,9 @@ def process_notice(
         rejected_count=len(rejected),
         repaired_count=repaired_count,
         category_counts=counts,
+        coverage_rate=coverage_report["coverage_rate"],
+        unmatched_count=len(coverage_report["unmatched_provisions"]),
+        review_rows=review_rows,
     )
 
 
@@ -2309,6 +2562,8 @@ def save_evaluation_summary(
         "raw_count",
         "accepted_count",
         "rejected_count",
+        "coverage_rate",
+        "unmatched_count",
         *EXTRACTION_CLASSES,
     ]
     with summary_path.open("w", encoding="utf-8-sig", newline="") as file_handle:
@@ -2323,6 +2578,8 @@ def save_evaluation_summary(
                 "raw_count": result.raw_count,
                 "accepted_count": result.accepted_count,
                 "rejected_count": result.rejected_count,
+                "coverage_rate": result.coverage_rate,
+                "unmatched_count": result.unmatched_count,
                 **{
                     category: result.category_counts.get(category, 0)
                     for category in EXTRACTION_CLASSES
@@ -2338,18 +2595,24 @@ def main() -> int:
     try:
         input_paths, batch_mode = collect_inputs(args)
         output_dir = args.output_dir.resolve()
+        args.event_manifest = load_event_manifest(args.manifest)
     except Exception as exc:
         print(f"任务未启动：{type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
 
     if not batch_mode:
         try:
-            process_notice(
+            stats = process_notice(
                 input_paths[0],
                 output_dir,
                 args,
                 print_details=True,
             )
+            review_path = write_review_queue(
+                stats.review_rows,
+                output_dir / "review_queue.csv",
+            )
+            print(f"  人工复核总表：{review_path.resolve()}")
             return 0
         except Exception as exc:
             print(f"运行失败：{type(exc).__name__}: {exc}", file=sys.stderr)
@@ -2396,6 +2659,10 @@ def main() -> int:
             print(f"[失败] {input_path.name}: {error}", file=sys.stderr)
 
     summary_path = save_evaluation_summary(results, output_dir)
+    review_path = write_review_queue(
+        [row for result in results for row in result.review_rows],
+        output_dir / "review_queue.csv",
+    )
     success_count = sum(result.status == "success" for result in results)
     failure_count = len(results) - success_count
     print("\n批量处理统计：")
@@ -2403,6 +2670,7 @@ def main() -> int:
     print(f"  成功：{success_count}")
     print(f"  失败：{failure_count}")
     print(f"  汇总文件：{summary_path.resolve()}")
+    print(f"  人工复核表：{review_path.resolve()}")
     return 0 if failure_count == 0 else 1
 
 

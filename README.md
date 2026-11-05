@@ -12,6 +12,43 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17015089.svg)](https://doi.org/10.5281/zenodo.17015089)
 [![Live demo](https://img.shields.io/badge/%F0%9F%A4%97%20demo-LangExtract-yellow)](https://google-langextract.hf.space/)
 
+## 中文交通管制公告抽取
+
+本仓库的项目层入口为 `traffic_notice_test.py`。它固定使用本地 Ollama 的
+`qwen2.5:7b`、`OllamaLanguageModel` 和 `UnicodeTokenizer`，不调用云端 API，
+也不向当前 Ollama provider 传递 `output_schema`。
+
+```powershell
+# 单篇
+python traffic_notice_test.py --input traffic_notice.txt --output-dir output
+
+# 目录内全部 .txt，串行处理；单篇失败不影响后续文件
+python traffic_notice_test.py --input-dir test_notices --output-dir output_calibrated
+
+# 可选：人工维护的 file_name,event_id 清单（CSV 或 JSON）
+python traffic_notice_test.py --input-dir test_notices --manifest event_manifest.csv
+```
+
+每篇公告保留原有的 `raw.jsonl`、`accepted.jsonl`、`rejected.json`、
+`model_responses.json` 和 `visualization.html`，并新增：
+
+- `<notice>_coverage.json`：候选条款的字符区间覆盖审计，只报告漏项，不补造抽取；
+- `<notice>_review.csv`：单篇人工复核表；
+- `review_queue.csv`：批量人工复核总表，使用 `utf-8-sig`；
+- `evaluation_summary.csv`：类别数量、覆盖率和未匹配条款数量；
+- `kg_export/*.jsonl`：证据可追溯、`review_status=pending` 的 GraphRAG 转换层。
+
+`accepted` 表示通过自动校验的机器抽取，不等于人工金标准。请在
+`review_queue.csv` 中填写 `is_correct`、修正字段与备注；未经人工确认的 KG 数据
+不会标记为人工确认事实。
+
+离线回归测试不需要 Ollama：
+
+```powershell
+python -m py_compile traffic_notice_test.py traffic_notice_batch.py
+python -m pytest tests/test_traffic_notice_pipeline.py -v
+```
+
 ## Table of Contents
 
 - [Introduction](#introduction)

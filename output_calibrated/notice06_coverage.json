@@ -1,0 +1,541 @@
+{
+  "source_id": "src_eddb361ecbf84108f9f4bbf7",
+  "source_sections": [
+    {
+      "text": "二、绕行路线",
+      "char_start": 271,
+      "char_end": 277,
+      "level": 1
+    },
+    {
+      "text": "三、禁行措施",
+      "char_start": 330,
+      "char_end": 336,
+      "level": 1
+    },
+    {
+      "text": "（一）进场管制道路（16:00—19:30）：",
+      "char_start": 338,
+      "char_end": 365,
+      "level": 2
+    },
+    {
+      "text": "（二）散场管制道路（21:30—23:00）：",
+      "char_start": 525,
+      "char_end": 548,
+      "level": 2
+    }
+  ],
+  "candidate_provisions": [
+    {
+      "candidate_id": "evd_0a35ce986e83b2497bc5af0e",
+      "section": "",
+      "text": "为确保2026年10月17日“动力火车“一路向前”巡回演唱会的顺利进行，保障演唱会期间道路交通的有序、顺畅、安全，决定在演唱会当天，对玉环市奥体中心附近部分路段采取禁止车辆通行的措施，现根据《中华人民共和国道路交通安全法》第三十九条的规定予以通告，现将有关事项通告如下：",
+      "char_start": 66,
+      "char_end": 201,
+      "road_names": [
+        "一路",
+        "保障演唱会期间道路",
+        "对玉环市奥体中心附近部分路",
+        "中华人民共和国道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_080cd7c2cae8c385c718abb8"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a13247135b6a26a4a3a675a3",
+      "section": "",
+      "text": "路段：滨江大道（同心路—肾病医院）路段；",
+      "char_start": 249,
+      "char_end": 269,
+      "road_names": [
+        "滨江大道",
+        "同心路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_95926731676774f62bad9590",
+      "section": "二、绕行路线",
+      "text": "禁行时段内，可以按以下路线绕行：",
+      "char_start": 279,
+      "char_end": 295,
+      "road_names": [
+        "可以按以下路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_5501bd0b9b88627d4779d2b6",
+      "section": "二、绕行路线",
+      "text": "西湖云庄小区(湿地公园)居民，沿滨江大道至同心路驶往楚门方向。",
+      "char_start": 297,
+      "char_end": 328,
+      "road_names": [
+        "沿滨江大道至同心路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_8c9982f82e1913b86ddbbdc4"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_b396d9968f58b385a997a7f0",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "1.滨江大道（南浦路-西湖云庄前）禁止中重型货车通行；",
+      "char_start": 367,
+      "char_end": 394,
+      "road_names": [
+        "滨江大道",
+        "南浦路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_7d56cc9bd9d49fc99c0dbcf0"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_bf714432c9b7c6becacfa143",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "2.滨江大道（碧桂园-水上乐园）禁止电动车通行；",
+      "char_start": 396,
+      "char_end": 420,
+      "road_names": [
+        "滨江大道"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_de753beeb7b97e9f3c92e4c1"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_97fdbd585cdf1d8fa97f351d",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "3.同心路（滨江大道-科园路）禁止中重型货车通行，禁止非机动车通行；",
+      "char_start": 422,
+      "char_end": 456,
+      "road_names": [
+        "同心路",
+        "滨江大道",
+        "科园路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_a97fb91a5fba935c17ad0e30"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_8c1ecea8c0eccaee6b5ddc1a",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "4.滨江大道机动车道两侧允许机动车有序单排停放。",
+      "char_start": 458,
+      "char_end": 482,
+      "road_names": [
+        "滨江大道"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_2e0a8e46b04a433351007c9e"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_48435a348e0f73212c1c2065",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "5.滨江大道海景路口到肾病医院、外环岛路肾病医院路口到同心路由南向北单向通行。",
+      "char_start": 484,
+      "char_end": 523,
+      "road_names": [
+        "滨江大道海景路",
+        "外环岛路肾病医院路口到同心路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_c47dce5e1f4767320cc72c27"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_72720a82790a6e5455d884ed",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "1.滨江大道（楚柚南路-西湖云庄）禁止车辆驶入；",
+      "char_start": 550,
+      "char_end": 574,
+      "road_names": [
+        "滨江大道",
+        "楚柚南路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_3150e54319f536f66c89a422"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_7a791aacaccff5c5a1234c7b",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "2.南浦路（港南大道-兴安路）禁止车辆驶入；",
+      "char_start": 576,
+      "char_end": 598,
+      "road_names": [
+        "南浦路",
+        "港南大道",
+        "兴安路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_974e452dd6b2cdc082a66aaf"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_9cdb4a178ca4da5ea9a57b7b",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "3.科园路（滨江大道观澜府-科园桥）禁止车辆驶入；",
+      "char_start": 600,
+      "char_end": 625,
+      "road_names": [
+        "科园路",
+        "滨江大道",
+        "科园桥"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_d14f580b89c8ac05c6be2b1c"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_3b958cd2dd0054b23d4538f9",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "4.科园路（滨江大道雅馨园北侧-科园路）禁止车辆驶入；",
+      "char_start": 627,
+      "char_end": 654,
+      "road_names": [
+        "科园路",
+        "滨江大道"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_6109e0784468932d499cc227"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_1e09666fea5957ac4cc00cf7",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "5.科园路（滨江大道雅馨园南侧-科园路）禁止车辆驶入；",
+      "char_start": 656,
+      "char_end": 683,
+      "road_names": [
+        "科园路",
+        "滨江大道"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_e07f3ae8784139814d9627c0"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_06767073858feb4d0eeba8b1",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "6.通海路（同心路-科园路）禁止车辆驶入；",
+      "char_start": 685,
+      "char_end": 706,
+      "road_names": [
+        "通海路",
+        "同心路",
+        "科园路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_bc1bc55792a002d97ef9cd64",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "四、玉环奥体中心周边的单位和广大市民群众，请提前安排好工作和生活出行，相关出行线路请及时关注发布的交通管理信息；因演唱会给广大交通参与者带来的不便敬请谅解和支持。",
+      "char_start": 708,
+      "char_end": 789,
+      "road_names": [
+        "相关出行线路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    }
+  ],
+  "matched_provisions": [
+    {
+      "candidate_id": "evd_0a35ce986e83b2497bc5af0e",
+      "section": "",
+      "text": "为确保2026年10月17日“动力火车“一路向前”巡回演唱会的顺利进行，保障演唱会期间道路交通的有序、顺畅、安全，决定在演唱会当天，对玉环市奥体中心附近部分路段采取禁止车辆通行的措施，现根据《中华人民共和国道路交通安全法》第三十九条的规定予以通告，现将有关事项通告如下：",
+      "char_start": 66,
+      "char_end": 201,
+      "road_names": [
+        "一路",
+        "保障演唱会期间道路",
+        "对玉环市奥体中心附近部分路",
+        "中华人民共和国道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_080cd7c2cae8c385c718abb8"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_5501bd0b9b88627d4779d2b6",
+      "section": "二、绕行路线",
+      "text": "西湖云庄小区(湿地公园)居民，沿滨江大道至同心路驶往楚门方向。",
+      "char_start": 297,
+      "char_end": 328,
+      "road_names": [
+        "沿滨江大道至同心路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_8c9982f82e1913b86ddbbdc4"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_b396d9968f58b385a997a7f0",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "1.滨江大道（南浦路-西湖云庄前）禁止中重型货车通行；",
+      "char_start": 367,
+      "char_end": 394,
+      "road_names": [
+        "滨江大道",
+        "南浦路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_7d56cc9bd9d49fc99c0dbcf0"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_bf714432c9b7c6becacfa143",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "2.滨江大道（碧桂园-水上乐园）禁止电动车通行；",
+      "char_start": 396,
+      "char_end": 420,
+      "road_names": [
+        "滨江大道"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_de753beeb7b97e9f3c92e4c1"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_97fdbd585cdf1d8fa97f351d",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "3.同心路（滨江大道-科园路）禁止中重型货车通行，禁止非机动车通行；",
+      "char_start": 422,
+      "char_end": 456,
+      "road_names": [
+        "同心路",
+        "滨江大道",
+        "科园路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_a97fb91a5fba935c17ad0e30"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_8c1ecea8c0eccaee6b5ddc1a",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "4.滨江大道机动车道两侧允许机动车有序单排停放。",
+      "char_start": 458,
+      "char_end": 482,
+      "road_names": [
+        "滨江大道"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_2e0a8e46b04a433351007c9e"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_48435a348e0f73212c1c2065",
+      "section": "（一）进场管制道路（16:00—19:30）：",
+      "text": "5.滨江大道海景路口到肾病医院、外环岛路肾病医院路口到同心路由南向北单向通行。",
+      "char_start": 484,
+      "char_end": 523,
+      "road_names": [
+        "滨江大道海景路",
+        "外环岛路肾病医院路口到同心路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_c47dce5e1f4767320cc72c27"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_72720a82790a6e5455d884ed",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "1.滨江大道（楚柚南路-西湖云庄）禁止车辆驶入；",
+      "char_start": 550,
+      "char_end": 574,
+      "road_names": [
+        "滨江大道",
+        "楚柚南路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_3150e54319f536f66c89a422"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_7a791aacaccff5c5a1234c7b",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "2.南浦路（港南大道-兴安路）禁止车辆驶入；",
+      "char_start": 576,
+      "char_end": 598,
+      "road_names": [
+        "南浦路",
+        "港南大道",
+        "兴安路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_974e452dd6b2cdc082a66aaf"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_9cdb4a178ca4da5ea9a57b7b",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "3.科园路（滨江大道观澜府-科园桥）禁止车辆驶入；",
+      "char_start": 600,
+      "char_end": 625,
+      "road_names": [
+        "科园路",
+        "滨江大道",
+        "科园桥"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_d14f580b89c8ac05c6be2b1c"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_3b958cd2dd0054b23d4538f9",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "4.科园路（滨江大道雅馨园北侧-科园路）禁止车辆驶入；",
+      "char_start": 627,
+      "char_end": 654,
+      "road_names": [
+        "科园路",
+        "滨江大道"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_6109e0784468932d499cc227"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_1e09666fea5957ac4cc00cf7",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "5.科园路（滨江大道雅馨园南侧-科园路）禁止车辆驶入；",
+      "char_start": 656,
+      "char_end": 683,
+      "road_names": [
+        "科园路",
+        "滨江大道"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_e07f3ae8784139814d9627c0"
+      ],
+      "coverage_status": "matched"
+    }
+  ],
+  "unmatched_provisions": [
+    {
+      "candidate_id": "evd_a13247135b6a26a4a3a675a3",
+      "section": "",
+      "text": "路段：滨江大道（同心路—肾病医院）路段；",
+      "char_start": 249,
+      "char_end": 269,
+      "road_names": [
+        "滨江大道",
+        "同心路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_95926731676774f62bad9590",
+      "section": "二、绕行路线",
+      "text": "禁行时段内，可以按以下路线绕行：",
+      "char_start": 279,
+      "char_end": 295,
+      "road_names": [
+        "可以按以下路"
+      ],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_06767073858feb4d0eeba8b1",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "6.通海路（同心路-科园路）禁止车辆驶入；",
+      "char_start": 685,
+      "char_end": 706,
+      "road_names": [
+        "通海路",
+        "同心路",
+        "科园路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_bc1bc55792a002d97ef9cd64",
+      "section": "（二）散场管制道路（21:30—23:00）：",
+      "text": "四、玉环奥体中心周边的单位和广大市民群众，请提前安排好工作和生活出行，相关出行线路请及时关注发布的交通管理信息；因演唱会给广大交通参与者带来的不便敬请谅解和支持。",
+      "char_start": 708,
+      "char_end": 789,
+      "road_names": [
+        "相关出行线路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    }
+  ],
+  "coverage_rate": 0.75,
+  "needs_review": true,
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:40:12+00:00",
+  "source_text_sha256": "6dd2d52ac51184177fc652e67dc13b19a8672602ade8fd98b0039993b8bebb06"
+}

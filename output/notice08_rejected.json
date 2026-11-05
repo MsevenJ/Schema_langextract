@@ -1,0 +1,161 @@
+{
+  "schema_version": "2.0",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice08.txt",
+  "document_id": "doc_1e239578",
+  "source_length": 949,
+  "raw_count": 21,
+  "accepted_count": 13,
+  "rejected_count": 8,
+  "rejections": [
+    {
+      "reasons": [
+        "发布日期必须是原文中的年月或年月日",
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月16日",
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "10月16日至18日",
+        "attributes": {
+          "precision": "month"
+        },
+        "char_interval": {
+          "start_pos": 125,
+          "end_pos": 131
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月16日",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月16日17:00至19:00",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 427,
+          "end_pos": 433
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 5,
+        "group_index": 4,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月17日17:00至19:00",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 6,
+        "group_index": 5,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月18日17:00至19:00",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 7,
+        "group_index": 6,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月16日",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月16日21:30至23:00",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 646,
+          "end_pos": 652
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 8,
+        "group_index": 7,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月17日21:30至23:00",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 9,
+        "group_index": 8,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月18日21:30至23:00",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 10,
+        "group_index": 9,
+        "description": null
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "散场期间，市民可在",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "散场期间，市民可在龙腾大道下行轨道奥体中心公交车站临时上下客，车辆需即停即走，不得临停等候。",
+        "attributes": {
+          "guidance_type": "egress",
+          "route_or_location": "",
+          "time_text": "散场期间",
+          "vehicle_scope": "所有车辆",
+          "action": "临时上下客，车辆需即停即走",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 746,
+          "end_pos": 755
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 8,
+        "group_index": 7,
+        "description": null
+      }
+    }
+  ]
+}

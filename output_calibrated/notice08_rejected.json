@@ -1,0 +1,207 @@
+{
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:47:05+00:00",
+  "source_text_sha256": "340e35a1ade85c27f43698ab91d5f8705688544674f5d73d90bf759369392a1f",
+  "source_id": "src_159aacacd1b5adb6f6bd12d7",
+  "input_file": "D:\\Me\\毕业论文\\langextract\\test_notices\\notice08.txt",
+  "document_id": "src_159aacacd1b5adb6f6bd12d7",
+  "source_length": 949,
+  "raw_count": 21,
+  "accepted_count": 13,
+  "rejected_count": 8,
+  "rejections": [
+    {
+      "reasons": [
+        "发布日期必须是原文中的年月或年月日",
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月16日",
+      "extraction": {
+        "extraction_class": "publication_date",
+        "extraction_text": "10月16日至18日",
+        "extraction_id": "ext_c08e65b8e4d9136f2312993e",
+        "evidence_id": "evd_00a5e6744e5259e3071600d2",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {
+          "precision": "day"
+        },
+        "char_interval": {
+          "start_pos": 125,
+          "end_pos": 131
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 2,
+        "group_index": 1,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月16日",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月16日17:00至19:00",
+        "extraction_id": "ext_3e8908bf83cbc293e101e8dd",
+        "evidence_id": "evd_cabf8265f867f3fb9046acee",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 427,
+          "end_pos": 433
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 5,
+        "group_index": 4,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月17日17:00至19:00",
+        "extraction_id": "ext_7373979acffb311afb093a85",
+        "evidence_id": "evd_af1ad935c89da9ca1f415b47",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 6,
+        "group_index": 5,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月18日17:00至19:00",
+        "extraction_id": "ext_7373979acffb311afb093a85",
+        "evidence_id": "evd_af1ad935c89da9ca1f415b47",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 7,
+        "group_index": 6,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "10月16日",
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月16日21:30至23:00",
+        "extraction_id": "ext_cc33d2fe33e7047e45d3f1ca",
+        "evidence_id": "evd_ae7b97ac25761b7a0e3a6e27",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": {
+          "start_pos": 646,
+          "end_pos": 652
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 8,
+        "group_index": 7,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月17日21:30至23:00",
+        "extraction_id": "ext_7373979acffb311afb093a85",
+        "evidence_id": "evd_af1ad935c89da9ca1f415b47",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 9,
+        "group_index": 8,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    },
+    {
+      "reasons": [
+        "char_interval 不存在"
+      ],
+      "located_text": null,
+      "extraction": {
+        "extraction_class": "control_time",
+        "extraction_text": "10月18日21:30至23:00",
+        "extraction_id": "ext_7373979acffb311afb093a85",
+        "evidence_id": "evd_af1ad935c89da9ca1f415b47",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {},
+        "char_interval": null,
+        "alignment_status": null,
+        "extraction_index": 10,
+        "group_index": 9,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    },
+    {
+      "reasons": [
+        "定位出的原文与 extraction_text 不一致"
+      ],
+      "located_text": "散场期间，市民可在",
+      "extraction": {
+        "extraction_class": "traffic_guidance",
+        "extraction_text": "散场期间，市民可在龙腾大道下行轨道奥体中心公交车站临时上下客，车辆需即停即走，不得临停等候。",
+        "extraction_id": "ext_63b0ab5742c42251dbba1beb",
+        "evidence_id": "evd_50487c275deb297a4dff84be",
+        "grounding_status": "mismatch",
+        "validation_status": "rejected",
+        "attributes": {
+          "guidance_type": "egress",
+          "route_or_location": "",
+          "time_text": "散场期间",
+          "vehicle_scope": "",
+          "action": "临时上下客，车辆需即停即走",
+          "condition": ""
+        },
+        "char_interval": {
+          "start_pos": 746,
+          "end_pos": 755
+        },
+        "alignment_status": "match_lesser",
+        "extraction_index": 8,
+        "group_index": 7,
+        "description": null,
+        "source_id": "src_159aacacd1b5adb6f6bd12d7"
+      }
+    }
+  ]
+}

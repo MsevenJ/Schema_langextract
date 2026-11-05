@@ -1,0 +1,445 @@
+{
+  "source_id": "src_c4654f3d8322459b56728cd4",
+  "source_sections": [
+    {
+      "text": "二、部分路段实施临时交通管制",
+      "char_start": 161,
+      "char_end": 175,
+      "level": 1
+    },
+    {
+      "text": "三、参展、离场注意事项",
+      "char_start": 578,
+      "char_end": 589,
+      "level": 1
+    }
+  ],
+  "candidate_provisions": [
+    {
+      "candidate_id": "evd_63303e73e43a036ad6adb86e",
+      "section": "",
+      "text": "第140届广交会来了，部分路段出行有变！",
+      "char_start": 0,
+      "char_end": 20,
+      "road_names": [
+        "部分路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_8a5f1829ff8b9b93915755ec"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_2cb51531a08bde011df41f85",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（一）在广交会展馆（A、B、C、D区）实施交通管制，除持有广交会车证的车辆外，禁止其他车辆进入。每天进场高峰期间（08:00至11:00）开放8号门，允许社会车辆借道展场西路，畅通交通微循环。",
+      "char_start": 177,
+      "char_end": 273,
+      "road_names": [
+        "允许社会车辆借道展场西路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_0b99ad59f3bf25c00ce8c5ad",
+        "ext_7a91a8e093118fdbe2f0b9ee"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a5162cae3497b81d14652eda",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（二）在东至科韵路（不含）、南至凤浦中路（含）、西至华南快速干线（不含）、北至阅江中路（含），严格实施货车限行措施，特别是早晚高峰禁止所有货车（持广交会车证的货车除外）进入通行。",
+      "char_start": 275,
+      "char_end": 364,
+      "road_names": [
+        "在东至科韵路",
+        "南至凤浦中路",
+        "北至阅江中路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_f35f86dacde385f3a189f10d"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a4e4c764625871abada9ef1f",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（三）南风西路在展会期间每天13:00-19:00将实施临时交通管制，作为出租车轮候区。",
+      "char_start": 366,
+      "char_end": 410,
+      "road_names": [
+        "南风西路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_a0951b61e7e491f1c9da78c1",
+        "ext_1484b0df8971f811b768bbac"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_90923a2d92122f30f89e82ae",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（四）在东至东环快速（不含）、南至新滘路（含）、西至猎德大道及江海大道（含）、北至临江大道（含）及黄埔大道（含），在相关路口、节点视情采取临时交通控流和分流措施。",
+      "char_start": 412,
+      "char_end": 493,
+      "road_names": [
+        "南至新滘路",
+        "西至猎德大道及江海大道",
+        "北至临江大道",
+        "及黄埔大道",
+        "在相关路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_7644baded30887ba3fb41919",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（五）散场期间（16:30至19:00），适时启用南风东华快通道，对南风东路双向实施临时交通管制，指引展馆内离场车辆从7号门经南风东路华快通道直接进入新洲收费站。",
+      "char_start": 495,
+      "char_end": 576,
+      "road_names": [
+        "对南风东路",
+        "指引展馆内离场车辆从7号门经南风东路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_a8b80c7ea4a400458b1671f3",
+        "ext_a5bc864c4e7ed2f510b8cf64"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_8e576483a8130f79b000c3c8",
+      "section": "三、参展、离场注意事项",
+      "text": "（一）5、6、10号门为临时港湾式上下车区域，参展车辆可靠边即停即走。",
+      "char_start": 591,
+      "char_end": 626,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_6f0b8c1b15636ce256578f69"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_0ff04d1b55bbd2d8f55f8ccb",
+      "section": "三、参展、离场注意事项",
+      "text": "（二）展会期间每天15:00至18:30，出租车上客点设置在会展中路2号通道，展场西路南行右1、右2车道；会展南三路路边设置非集结出租车临时上客点。",
+      "char_start": 628,
+      "char_end": 702,
+      "road_names": [
+        "出租车上客点设置在会展中路",
+        "展场西路",
+        "会展南三路路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_c352d5c7a279db0728513801"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_0d73d794c813889ff536c9a4",
+      "section": "",
+      "text": "②琶洲大道东（西往东方向，会展东路口往东100米路段）；",
+      "char_start": 752,
+      "char_end": 780,
+      "road_names": [
+        "琶洲大道",
+        "会展东路口往东100米路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_3146b48ff81c4e613d15ef18",
+      "section": "",
+      "text": "③会展南二路；",
+      "char_start": 782,
+      "char_end": 789,
+      "road_names": [
+        "会展南二路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_221d6304e5d710436038c9ab",
+      "section": "",
+      "text": "④会展南三路。",
+      "char_start": 791,
+      "char_end": 798,
+      "road_names": [
+        "会展南三路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_0250c45c7b09cfb7d8b8007a",
+      "section": "",
+      "text": "（四）筹撤展期间，实施货车预约轮候机制，持证货车可按预约时段分批、错峰进入琶洲会展中心范围内道路通行，严禁违反规定提前进入。",
+      "char_start": 800,
+      "char_end": 862,
+      "road_names": [
+        "错峰进入琶洲会展中心范围内道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_845dfb60b1e2c2cffe337a84",
+      "section": "",
+      "text": "（五）展馆内停车位仅供持证车辆按照指定区域有序停放，展馆周边区域停车位有限，请广大市民朋友尽量选择公共交通工具前往。建议乘坐地铁（8号线琶洲站或新港东站、11号线琶洲站）或公交出行。",
+      "char_start": 864,
+      "char_end": 955,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_1e9cba646351c73e8818597e"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_dba9e7d9158391082f1d88fc",
+      "section": "",
+      "text": "广交会期间，部分路段将视情况实施临时交通管理措施。请广大市民朋友理解和配合，听从现场交警和工作人员指引，文明、规范驾驶。",
+      "char_start": 965,
+      "char_end": 1025,
+      "road_names": [
+        "部分路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    }
+  ],
+  "matched_provisions": [
+    {
+      "candidate_id": "evd_63303e73e43a036ad6adb86e",
+      "section": "",
+      "text": "第140届广交会来了，部分路段出行有变！",
+      "char_start": 0,
+      "char_end": 20,
+      "road_names": [
+        "部分路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_8a5f1829ff8b9b93915755ec"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_2cb51531a08bde011df41f85",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（一）在广交会展馆（A、B、C、D区）实施交通管制，除持有广交会车证的车辆外，禁止其他车辆进入。每天进场高峰期间（08:00至11:00）开放8号门，允许社会车辆借道展场西路，畅通交通微循环。",
+      "char_start": 177,
+      "char_end": 273,
+      "road_names": [
+        "允许社会车辆借道展场西路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_0b99ad59f3bf25c00ce8c5ad",
+        "ext_7a91a8e093118fdbe2f0b9ee"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a5162cae3497b81d14652eda",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（二）在东至科韵路（不含）、南至凤浦中路（含）、西至华南快速干线（不含）、北至阅江中路（含），严格实施货车限行措施，特别是早晚高峰禁止所有货车（持广交会车证的货车除外）进入通行。",
+      "char_start": 275,
+      "char_end": 364,
+      "road_names": [
+        "在东至科韵路",
+        "南至凤浦中路",
+        "北至阅江中路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_f35f86dacde385f3a189f10d"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_a4e4c764625871abada9ef1f",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（三）南风西路在展会期间每天13:00-19:00将实施临时交通管制，作为出租车轮候区。",
+      "char_start": 366,
+      "char_end": 410,
+      "road_names": [
+        "南风西路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_a0951b61e7e491f1c9da78c1",
+        "ext_1484b0df8971f811b768bbac"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_7644baded30887ba3fb41919",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（五）散场期间（16:30至19:00），适时启用南风东华快通道，对南风东路双向实施临时交通管制，指引展馆内离场车辆从7号门经南风东路华快通道直接进入新洲收费站。",
+      "char_start": 495,
+      "char_end": 576,
+      "road_names": [
+        "对南风东路",
+        "指引展馆内离场车辆从7号门经南风东路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [
+        "ext_a8b80c7ea4a400458b1671f3",
+        "ext_a5bc864c4e7ed2f510b8cf64"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_8e576483a8130f79b000c3c8",
+      "section": "三、参展、离场注意事项",
+      "text": "（一）5、6、10号门为临时港湾式上下车区域，参展车辆可靠边即停即走。",
+      "char_start": 591,
+      "char_end": 626,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_6f0b8c1b15636ce256578f69"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_0ff04d1b55bbd2d8f55f8ccb",
+      "section": "三、参展、离场注意事项",
+      "text": "（二）展会期间每天15:00至18:30，出租车上客点设置在会展中路2号通道，展场西路南行右1、右2车道；会展南三路路边设置非集结出租车临时上客点。",
+      "char_start": 628,
+      "char_end": 702,
+      "road_names": [
+        "出租车上客点设置在会展中路",
+        "展场西路",
+        "会展南三路路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [
+        "ext_c352d5c7a279db0728513801"
+      ],
+      "coverage_status": "matched"
+    },
+    {
+      "candidate_id": "evd_845dfb60b1e2c2cffe337a84",
+      "section": "",
+      "text": "（五）展馆内停车位仅供持证车辆按照指定区域有序停放，展馆周边区域停车位有限，请广大市民朋友尽量选择公共交通工具前往。建议乘坐地铁（8号线琶洲站或新港东站、11号线琶洲站）或公交出行。",
+      "char_start": 864,
+      "char_end": 955,
+      "road_names": [],
+      "class_hint": "traffic_guidance",
+      "matched_extraction_ids": [
+        "ext_1e9cba646351c73e8818597e"
+      ],
+      "coverage_status": "matched"
+    }
+  ],
+  "unmatched_provisions": [
+    {
+      "candidate_id": "evd_90923a2d92122f30f89e82ae",
+      "section": "二、部分路段实施临时交通管制",
+      "text": "（四）在东至东环快速（不含）、南至新滘路（含）、西至猎德大道及江海大道（含）、北至临江大道（含）及黄埔大道（含），在相关路口、节点视情采取临时交通控流和分流措施。",
+      "char_start": 412,
+      "char_end": 493,
+      "road_names": [
+        "南至新滘路",
+        "西至猎德大道及江海大道",
+        "北至临江大道",
+        "及黄埔大道",
+        "在相关路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_0d73d794c813889ff536c9a4",
+      "section": "",
+      "text": "②琶洲大道东（西往东方向，会展东路口往东100米路段）；",
+      "char_start": 752,
+      "char_end": 780,
+      "road_names": [
+        "琶洲大道",
+        "会展东路口往东100米路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_3146b48ff81c4e613d15ef18",
+      "section": "",
+      "text": "③会展南二路；",
+      "char_start": 782,
+      "char_end": 789,
+      "road_names": [
+        "会展南二路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_221d6304e5d710436038c9ab",
+      "section": "",
+      "text": "④会展南三路。",
+      "char_start": 791,
+      "char_end": 798,
+      "road_names": [
+        "会展南三路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_0250c45c7b09cfb7d8b8007a",
+      "section": "",
+      "text": "（四）筹撤展期间，实施货车预约轮候机制，持证货车可按预约时段分批、错峰进入琶洲会展中心范围内道路通行，严禁违反规定提前进入。",
+      "char_start": 800,
+      "char_end": 862,
+      "road_names": [
+        "错峰进入琶洲会展中心范围内道路"
+      ],
+      "class_hint": "control_rule",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    },
+    {
+      "candidate_id": "evd_dba9e7d9158391082f1d88fc",
+      "section": "",
+      "text": "广交会期间，部分路段将视情况实施临时交通管理措施。请广大市民朋友理解和配合，听从现场交警和工作人员指引，文明、规范驾驶。",
+      "char_start": 965,
+      "char_end": 1025,
+      "road_names": [
+        "部分路"
+      ],
+      "class_hint": "needs_review",
+      "matched_extraction_ids": [],
+      "coverage_status": "unmatched"
+    }
+  ],
+  "coverage_rate": 0.571429,
+  "needs_review": true,
+  "schema_version": "2.0",
+  "prompt_version": "2.1.0",
+  "model_name": "qwen2.5:7b",
+  "ollama_url": "http://127.0.0.1:11434",
+  "run_timestamp": "2026-11-05T02:31:57+00:00",
+  "source_text_sha256": "9102ea0a3de5e36dd8523b6f26e42f890bcf3eeea13323519bcd1dc33b1089c3"
+}
