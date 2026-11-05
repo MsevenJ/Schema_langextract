@@ -1,0 +1,11 @@
+﻿extraction_class,model_rows,gold_rows,reviewed_rows,pending_rows,correct_rows,modified_rows,deleted_rows,added_rows,review_completion_rate,exact_acceptance_rate,gold_retention_rate
+issuing_authority,5,0,0,5,0,0,0,0,0.000000,,0.000000
+publication_date,5,0,0,5,0,0,0,0,0.000000,,0.000000
+event_name,5,0,0,5,0,0,0,0,0.000000,,0.000000
+event_venue,5,0,0,5,0,0,0,0,0.000000,,0.000000
+event_time,5,0,0,5,0,0,0,0,0.000000,,0.000000
+control_time,22,0,0,22,0,0,0,0,0.000000,,0.000000
+control_rule,38,0,0,38,0,0,0,0,0.000000,,0.000000
+traffic_guidance,28,0,0,28,0,0,0,0,0.000000,,0.000000
+needs_review,13,0,0,13,0,0,0,0,0.000000,,0.000000
+__overall__,126,0,0,126,0,0,0,0,0.000000,,0.000000
