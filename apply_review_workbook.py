@@ -30,17 +30,23 @@ DEFAULT_METRICS_OUTPUT = Path("evaluation/model_vs_gold_metrics.csv")
 ANNOUNCEMENT_SHEET = "公告信息复核"
 CONTROL_SHEET = "道路管制复核"
 GUIDANCE_SHEET = "交通引导复核"
+MISSING_SHEET = "漏抽候选复核"
 RAW_SHEET = "原始结果"
 
 ANNOUNCEMENT_HEADERS = (
     "文件名",
     "活动名称",
+    "活动名称复核结论",
     "活动场馆",
+    "活动场馆复核结论",
     "活动时间",
+    "活动时间复核结论",
     "管制时间",
+    "管制时间复核结论",
     "发布机关",
+    "发布机关复核结论",
     "发布日期",
-    "复核结论",
+    "发布日期复核结论",
     "复核备注",
     "source_id",
 )
@@ -79,6 +85,28 @@ GUIDANCE_HEADERS = (
     "source_id",
 )
 
+MISSING_HEADERS = (
+    "文件名",
+    "候选原文",
+    "道路名称",
+    "目标类型",
+    "对应结构化字段",
+    "管制路段",
+    "方向",
+    "时间",
+    "管制措施",
+    "车辆范围",
+    "引导类型",
+    "路线或位置",
+    "具体动作",
+    "实施条件",
+    "例外车辆或方式",
+    "复核结论",
+    "复核备注",
+    "extraction_id",
+    "source_id",
+)
+
 EVENT_CLASS_BY_COLUMN = {
     "活动名称": "event_name",
     "活动场馆": "event_venue",
@@ -86,6 +114,22 @@ EVENT_CLASS_BY_COLUMN = {
     "管制时间": "control_time",
     "发布机关": "issuing_authority",
     "发布日期": "publication_date",
+}
+
+GUIDANCE_TYPE_BY_LABEL = {
+    "绕行路线": "detour",
+    "入场路线": "access",
+    "散场/离场路线": "egress",
+    "停车": "parking",
+    "上下客": "drop_off",
+    "公共交通": "public_transport",
+    "一般出行建议": "general_advice",
+}
+
+TARGET_CLASS_BY_LABEL = {
+    "道路管制": "control_rule",
+    "交通引导": "traffic_guidance",
+    "非目标": "non_target",
 }
 
 EVENT_CLASSES = frozenset(EVENT_CLASS_BY_COLUMN.values())
@@ -122,6 +166,7 @@ CSV_FIELDNAMES = (
     "review_status",
     "review_conclusion",
     "review_note",
+    "record_origin",
     "event_name",
     "precision",
     "road_names",
@@ -262,6 +307,15 @@ def _infer_publication_precision(value: str, fallback: str = "") -> str:
     return fallback
 
 
+def _guidance_type_code(value: str) -> str:
+    value = value.strip()
+    if value in GUIDANCE_TYPE_BY_LABEL:
+        return GUIDANCE_TYPE_BY_LABEL[value]
+    if value in GUIDANCE_TYPES:
+        return value
+    return ""
+
+
 def _make_record(
     *,
     original: dict[str, str] | None,
@@ -275,8 +329,11 @@ def _make_record(
     conclusion: str,
     review_note: str,
     event_name: str = "",
+    record_origin: str | None = None,
 ) -> dict[str, Any]:
     original = original or {}
+    if record_origin is None:
+        record_origin = "model" if original else "manual"
     road_names = attributes.get("road_names", [])
     record: dict[str, Any] = {
         "schema_version": "2.0",
@@ -290,6 +347,7 @@ def _make_record(
         "review_status": "pending" if conclusion == "待复核" else "confirmed",
         "review_conclusion": conclusion,
         "review_note": review_note,
+        "record_origin": record_origin,
         "event_name": event_name,
         "attributes": attributes,
         "precision": _display_list(attributes.get("precision")),
@@ -358,6 +416,7 @@ def _control_record(
     original: dict[str, str] | None,
     conclusion: str,
     ordinal: int,
+    record_origin: str | None = None,
 ) -> dict[str, Any]:
     attributes = {
         "road_names": _split_list(row["道路名称"]),
@@ -386,6 +445,7 @@ def _control_record(
         conclusion=conclusion,
         review_note=row["复核备注"],
         event_name=row["活动名称"],
+        record_origin=record_origin,
     )
 
 
@@ -396,12 +456,15 @@ def _guidance_record(
     conclusion: str,
     ordinal: int,
     row_number: int,
+    record_origin: str | None = None,
+    sheet_name: str = GUIDANCE_SHEET,
 ) -> dict[str, Any]:
-    guidance_type = row["引导类型"].strip()
-    if conclusion in CONFIRMED_CONCLUSIONS and guidance_type not in GUIDANCE_TYPES:
-        allowed = "、".join(sorted(GUIDANCE_TYPES))
+    guidance_label = row["引导类型"].strip()
+    guidance_type = _guidance_type_code(guidance_label)
+    if conclusion in CONFIRMED_CONCLUSIONS and not guidance_type:
+        allowed = "、".join(GUIDANCE_TYPE_BY_LABEL)
         raise ValueError(
-            f"工作表“{GUIDANCE_SHEET}”第 {row_number} 行引导类型必须是: {allowed}"
+            f"工作表“{sheet_name}”第 {row_number} 行引导类型必须是: {allowed}"
         )
     attributes = {
         "guidance_type": guidance_type,
@@ -428,6 +491,98 @@ def _guidance_record(
         conclusion=conclusion,
         review_note=row["复核备注"],
         event_name=row["活动名称"],
+        record_origin=record_origin,
+    )
+
+
+def _resolve_identity(
+    row: dict[str, str],
+    *,
+    file_to_sources: dict[str, set[str]],
+    source_to_file: dict[str, str],
+    sheet_name: str,
+    row_number: int,
+) -> None:
+    file_name = row.get("文件名", "").strip()
+    source_id = row.get("source_id", "").strip()
+    if not source_id and file_name:
+        candidates = file_to_sources.get(file_name, set())
+        if len(candidates) == 1:
+            source_id = next(iter(candidates))
+            row["source_id"] = source_id
+    if not file_name and source_id in source_to_file:
+        row["文件名"] = source_to_file[source_id]
+        file_name = row["文件名"]
+    if not source_id:
+        raise ValueError(
+            f"工作表“{sheet_name}”第 {row_number} 行无法确定 source_id；"
+            "请填写 source_id 或已知文件名。"
+        )
+
+
+def _missing_candidate_record(
+    *,
+    row: dict[str, str],
+    original: dict[str, str] | None,
+    conclusion: str,
+    ordinal: int,
+    row_number: int,
+) -> dict[str, Any] | None:
+    if conclusion == "删除":
+        return None
+    target_label = row["目标类型"].strip()
+    target_class = TARGET_CLASS_BY_LABEL.get(target_label, "")
+    if conclusion in CONFIRMED_CONCLUSIONS and not target_class:
+        raise ValueError(
+            f"工作表“{MISSING_SHEET}”第 {row_number} 行已完成复核，"
+            "但未选择目标类型。"
+        )
+    if target_class in ("", "non_target"):
+        return None
+
+    common = {
+        "文件名": row["文件名"],
+        "活动名称": "",
+        "道路名称": row["道路名称"],
+        "车辆范围": row["车辆范围"],
+        "实施条件": row["实施条件"],
+        "原文证据": row["候选原文"],
+        "复核备注": row["复核备注"],
+        "extraction_id": row["extraction_id"],
+        "source_id": row["source_id"],
+    }
+    if target_class == "control_rule":
+        control_row = {
+            **common,
+            "管制路段": row["管制路段"],
+            "方向": row["方向"],
+            "管制时间": row["时间"],
+            "管制措施": row["管制措施"],
+            "例外车辆或方式": row["例外车辆或方式"],
+        }
+        return _control_record(
+            row=control_row,
+            original=original,
+            conclusion=conclusion,
+            ordinal=ordinal,
+            record_origin="needs_review",
+        )
+
+    guidance_row = {
+        **common,
+        "引导类型": row["引导类型"],
+        "路线或位置": row["路线或位置"],
+        "适用时间": row["时间"],
+        "具体动作": row["具体动作"],
+    }
+    return _guidance_record(
+        row=guidance_row,
+        original=original,
+        conclusion=conclusion,
+        ordinal=ordinal,
+        row_number=row_number,
+        record_origin="needs_review",
+        sheet_name=MISSING_SHEET,
     )
 
 
@@ -538,6 +693,8 @@ def _build_metrics(
     for row, decision in zip(raw_rows, decisions):
         status_counts[row.get("extraction_class", "")][decision] += 1
     added_counts = Counter(extraction_class for extraction_class, _ in extra_decisions)
+    for extraction_class, decision in extra_decisions:
+        status_counts[extraction_class][decision] += 1
 
     seen = set(model_counts) | set(gold_counts) | set(added_counts)
     ordered_classes = [item for item in CLASS_ORDER if item in seen]
@@ -552,6 +709,7 @@ def _build_metrics(
         deleted = counts["删除"]
         pending = counts["待复核"]
         reviewed = correct + modified + deleted
+        total_review_rows = model_rows + added_counts[extraction_class]
         metrics.append({
             "extraction_class": extraction_class,
             "model_rows": model_rows,
@@ -562,9 +720,11 @@ def _build_metrics(
             "modified_rows": modified,
             "deleted_rows": deleted,
             "added_rows": added_counts[extraction_class],
-            "review_completion_rate": _rate(reviewed, model_rows),
+            "review_completion_rate": _rate(reviewed, total_review_rows),
             "exact_acceptance_rate": _rate(correct, reviewed),
-            "gold_retention_rate": _rate(gold_counts[extraction_class], model_rows),
+            "gold_retention_rate": _rate(
+                gold_counts[extraction_class], total_review_rows
+            ),
         })
 
     overall = {
@@ -583,9 +743,15 @@ def _build_metrics(
     metrics.append({
         "extraction_class": "__overall__",
         **overall,
-        "review_completion_rate": _rate(overall["reviewed_rows"], overall["model_rows"]),
+        "review_completion_rate": _rate(
+            overall["reviewed_rows"],
+            overall["model_rows"] + overall["added_rows"],
+        ),
         "exact_acceptance_rate": _rate(overall["correct_rows"], overall["reviewed_rows"]),
-        "gold_retention_rate": _rate(overall["gold_rows"], overall["model_rows"]),
+        "gold_retention_rate": _rate(
+            overall["gold_rows"],
+            overall["model_rows"] + overall["added_rows"],
+        ),
     })
     return metrics
 
@@ -616,6 +782,7 @@ def apply_workbook(
         )
         _, control_rows = _sheet_rows(workbook, CONTROL_SHEET, CONTROL_HEADERS)
         _, guidance_rows = _sheet_rows(workbook, GUIDANCE_SHEET, GUIDANCE_HEADERS)
+        _, missing_rows = _sheet_rows(workbook, MISSING_SHEET, MISSING_HEADERS)
         raw_headers, numbered_raw_rows = _sheet_rows(workbook, RAW_SHEET)
     finally:
         workbook.close()
@@ -635,21 +802,30 @@ def apply_workbook(
 
     indices_by_source_class: dict[tuple[str, str], list[int]] = defaultdict(list)
     indices_by_key: dict[tuple[str, str, str], list[int]] = defaultdict(list)
+    file_to_sources: dict[str, set[str]] = defaultdict(set)
+    source_to_file: dict[str, str] = {}
     for index, raw_row in enumerate(raw_rows):
         source_id = raw_row.get("source_id", "")
         extraction_class = raw_row.get("extraction_class", "")
         extraction_id = raw_row.get("extraction_id", "")
         indices_by_source_class[(source_id, extraction_class)].append(index)
         indices_by_key[(source_id, extraction_class, extraction_id)].append(index)
+        file_name = raw_row.get("file_name", "")
+        if file_name and source_id:
+            file_to_sources[file_name].add(source_id)
+            source_to_file.setdefault(source_id, file_name)
 
     for row_number, row in announcement_rows:
-        conclusion = _normalize_conclusion(
-            row["复核结论"], sheet_name=ANNOUNCEMENT_SHEET, row_number=row_number
-        )
         source_id = row["source_id"].strip()
         if not source_id:
             raise ValueError(f"工作表“{ANNOUNCEMENT_SHEET}”第 {row_number} 行 source_id 为空")
         for column, extraction_class in EVENT_CLASS_BY_COLUMN.items():
+            conclusion_header = f"{column}复核结论"
+            conclusion = _normalize_conclusion(
+                row[conclusion_header],
+                sheet_name=ANNOUNCEMENT_SHEET,
+                row_number=row_number,
+            )
             original_indices = indices_by_source_class.get((source_id, extraction_class), [])
             represented_indices.update(original_indices)
             for index in original_indices:
@@ -691,6 +867,13 @@ def apply_workbook(
         conclusion = _normalize_conclusion(
             row["复核结论"], sheet_name=CONTROL_SHEET, row_number=row_number
         )
+        _resolve_identity(
+            row,
+            file_to_sources=file_to_sources,
+            source_to_file=source_to_file,
+            sheet_name=CONTROL_SHEET,
+            row_number=row_number,
+        )
         source_id = row["source_id"].strip()
         extraction_id = row["extraction_id"].strip()
         original_index = _find_original_index(
@@ -710,7 +893,11 @@ def apply_workbook(
             represented_indices.add(original_index)
             decisions[original_index] = conclusion
         record = _control_record(
-            row=row, original=original, conclusion=conclusion, ordinal=ordinal
+            row=row,
+            original=original,
+            conclusion=conclusion,
+            ordinal=ordinal,
+            record_origin="model" if original is not None else "manual",
         )
         _record_decision(
             conclusion=conclusion,
@@ -722,6 +909,13 @@ def apply_workbook(
     for ordinal, (row_number, row) in enumerate(guidance_rows):
         conclusion = _normalize_conclusion(
             row["复核结论"], sheet_name=GUIDANCE_SHEET, row_number=row_number
+        )
+        _resolve_identity(
+            row,
+            file_to_sources=file_to_sources,
+            source_to_file=source_to_file,
+            sheet_name=GUIDANCE_SHEET,
+            row_number=row_number,
         )
         source_id = row["source_id"].strip()
         extraction_id = row["extraction_id"].strip()
@@ -747,6 +941,7 @@ def apply_workbook(
             conclusion=conclusion,
             ordinal=ordinal,
             row_number=row_number,
+            record_origin="model" if original is not None else "manual",
         )
         _record_decision(
             conclusion=conclusion,
@@ -755,8 +950,69 @@ def apply_workbook(
             unreviewed_records=unreviewed_records,
         )
 
-    # Any source row that is not represented in one of the three review sheets
-    # (notably extraction_class=needs_review) remains explicitly unreviewed.
+    for ordinal, (row_number, row) in enumerate(missing_rows):
+        conclusion = _normalize_conclusion(
+            row["复核结论"], sheet_name=MISSING_SHEET, row_number=row_number
+        )
+        _resolve_identity(
+            row,
+            file_to_sources=file_to_sources,
+            source_to_file=source_to_file,
+            sheet_name=MISSING_SHEET,
+            row_number=row_number,
+        )
+        source_id = row["source_id"].strip()
+        extraction_id = row["extraction_id"].strip()
+        original_index = _find_original_index(
+            indices_by_key=indices_by_key,
+            raw_rows=raw_rows,
+            used_indices=used_indices,
+            source_id=source_id,
+            extraction_class="needs_review",
+            extraction_id=extraction_id,
+            evidence=row["候选原文"].strip(),
+        )
+        original = raw_rows[original_index] if original_index is not None else None
+        if original_index is None:
+            extra_decisions.append(("needs_review", conclusion))
+        else:
+            used_indices.add(original_index)
+            represented_indices.add(original_index)
+            decisions[original_index] = conclusion
+
+        if conclusion == "待复核":
+            if original is not None:
+                unreviewed_records.append(_original_record(original))
+            else:
+                unreviewed_records.append(_make_record(
+                    original=None,
+                    file_name=row["文件名"],
+                    source_id=source_id,
+                    extraction_id=extraction_id or _synthetic_extraction_id(
+                        source_id, "needs_review", row["候选原文"], ordinal
+                    ),
+                    extraction_class="needs_review",
+                    extraction_text=row["候选原文"],
+                    evidence_text=row["候选原文"],
+                    attributes={"road_names": _split_list(row["道路名称"])},
+                    conclusion=conclusion,
+                    review_note=row["复核备注"],
+                    record_origin="manual",
+                ))
+            continue
+
+        record = _missing_candidate_record(
+            row=row,
+            original=original,
+            conclusion=conclusion,
+            ordinal=ordinal,
+            row_number=row_number,
+        )
+        if record is not None:
+            gold_records.append(record)
+
+    # Any raw source row missing from all review sheets remains explicitly
+    # pending, so a workbook edit cannot silently discard a model candidate.
     for index, raw_row in enumerate(raw_rows):
         if index not in represented_indices:
             unreviewed_records.append(_original_record(raw_row))
@@ -770,7 +1026,10 @@ def apply_workbook(
     return {
         "gold": len(gold_records),
         "unreviewed": len(unreviewed_records),
-        "deleted": sum(1 for decision in decisions if decision == "删除"),
+        "deleted": (
+            sum(1 for decision in decisions if decision == "删除")
+            + sum(1 for _, decision in extra_decisions if decision == "删除")
+        ),
         "source_rows": len(raw_rows),
     }
 

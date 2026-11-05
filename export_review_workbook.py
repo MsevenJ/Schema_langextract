@@ -16,8 +16,10 @@ from typing import Any, Iterable, Sequence
 
 try:
     from openpyxl import Workbook
+    from openpyxl.comments import Comment
     from openpyxl.formatting.rule import FormulaRule
     from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.worksheet.table import Table, TableStyleInfo
     from openpyxl.utils import get_column_letter
     from openpyxl.worksheet.datavalidation import DataValidation
 except ImportError as exc:  # pragma: no cover - depends on the local environment.
@@ -34,17 +36,23 @@ REVIEW_OPTIONS = ("待复核", "正确", "已修改", "删除")
 ANNOUNCEMENT_SHEET = "公告信息复核"
 CONTROL_SHEET = "道路管制复核"
 GUIDANCE_SHEET = "交通引导复核"
+MISSING_SHEET = "漏抽候选复核"
 RAW_SHEET = "原始结果"
 
 ANNOUNCEMENT_HEADERS = (
     "文件名",
     "活动名称",
+    "活动名称复核结论",
     "活动场馆",
+    "活动场馆复核结论",
     "活动时间",
+    "活动时间复核结论",
     "管制时间",
+    "管制时间复核结论",
     "发布机关",
+    "发布机关复核结论",
     "发布日期",
-    "复核结论",
+    "发布日期复核结论",
     "复核备注",
     "source_id",
 )
@@ -83,6 +91,28 @@ GUIDANCE_HEADERS = (
     "source_id",
 )
 
+MISSING_HEADERS = (
+    "文件名",
+    "候选原文",
+    "道路名称",
+    "目标类型",
+    "对应结构化字段",
+    "管制路段",
+    "方向",
+    "时间",
+    "管制措施",
+    "车辆范围",
+    "引导类型",
+    "路线或位置",
+    "具体动作",
+    "实施条件",
+    "例外车辆或方式",
+    "复核结论",
+    "复核备注",
+    "extraction_id",
+    "source_id",
+)
+
 EVENT_COLUMN_BY_CLASS = OrderedDict((
     ("event_name", "活动名称"),
     ("event_venue", "活动场馆"),
@@ -91,6 +121,19 @@ EVENT_COLUMN_BY_CLASS = OrderedDict((
     ("issuing_authority", "发布机关"),
     ("publication_date", "发布日期"),
 ))
+
+GUIDANCE_TYPE_LABELS = OrderedDict((
+    ("detour", "绕行路线"),
+    ("access", "入场路线"),
+    ("egress", "散场/离场路线"),
+    ("parking", "停车"),
+    ("drop_off", "上下客"),
+    ("public_transport", "公共交通"),
+    ("general_advice", "一般出行建议"),
+))
+
+TARGET_TYPES = ("道路管制", "交通引导", "非目标")
+MAX_REVIEW_ROWS = 5000
 
 REQUIRED_INPUT_FIELDS = {
     "source_id",
@@ -181,10 +224,15 @@ def _build_announcement_rows(
         output.append([
             first["file_name"],
             values["活动名称"],
+            "待复核",
             values["活动场馆"],
+            "待复核",
             values["活动时间"],
+            "待复核",
             values["管制时间"],
+            "待复核",
             values["发布机关"],
+            "待复核",
             values["发布日期"],
             "待复核",
             "",
@@ -246,13 +294,50 @@ def _build_guidance_rows(
         output.append([
             row["file_name"],
             event_names.get(row["source_id"], ""),
-            _display_list(attributes.get("guidance_type")),
+            GUIDANCE_TYPE_LABELS.get(
+                _display_list(attributes.get("guidance_type")),
+                _display_list(attributes.get("guidance_type")),
+            ),
             _display_list(route_or_location),
             _display_list(attributes.get("time_text")),
             _display_list(attributes.get("vehicle_scope")),
             _display_list(attributes.get("action")),
             _display_list(attributes.get("condition")),
             row["extraction_text"],
+            "待复核",
+            "",
+            row["extraction_id"],
+            row["source_id"],
+        ])
+    return output
+
+
+def _build_missing_rows(rows: Sequence[dict[str, str]]) -> list[list[str]]:
+    output: list[list[str]] = []
+    instructions = "选择目标类型后，填写右侧适用的普通列"
+    for row_number, row in enumerate(rows, start=2):
+        if row["extraction_class"] != "needs_review":
+            continue
+        attributes = _parse_attributes(row["attributes_json"], row_number=row_number)
+        output.append([
+            row["file_name"],
+            row["extraction_text"],
+            _display_list(attributes.get("road_names")),
+            "",
+            instructions,
+            _display_list(attributes.get("road_range")),
+            _display_list(attributes.get("direction")),
+            _display_list(attributes.get("time_text")),
+            _display_list(attributes.get("measure")),
+            _display_list(attributes.get("vehicle_scope")),
+            GUIDANCE_TYPE_LABELS.get(
+                _display_list(attributes.get("guidance_type")),
+                _display_list(attributes.get("guidance_type")),
+            ),
+            _display_list(attributes.get("route_or_location")),
+            _display_list(attributes.get("action")),
+            _display_list(attributes.get("condition")),
+            _display_list(attributes.get("exception")),
             "待复核",
             "",
             row["extraction_id"],
@@ -281,33 +366,92 @@ def _append_table(worksheet: Any, headers: Sequence[str], rows: Iterable[Sequenc
             cell.number_format = "@"
 
 
-def _add_review_validation(worksheet: Any, headers: Sequence[str]) -> None:
-    conclusion_index = headers.index("复核结论") + 1
-    conclusion_letter = get_column_letter(conclusion_index)
-    final_row = max(worksheet.max_row, 2)
+def _add_list_validation(
+    worksheet: Any,
+    headers: Sequence[str],
+    header: str,
+    options: Sequence[str],
+    *,
+    allow_blank: bool,
+    error_title: str,
+    error: str,
+    prompt: str,
+) -> None:
+    column_index = headers.index(header) + 1
+    column_letter = get_column_letter(column_index)
     validation = DataValidation(
         type="list",
-        formula1='"' + ",".join(REVIEW_OPTIONS) + '"',
-        allow_blank=False,
+        formula1='"' + ",".join(options) + '"',
+        allow_blank=allow_blank,
     )
-    validation.errorTitle = "复核结论无效"
-    validation.error = "请从下拉列表中选择待复核、正确、已修改或删除。"
-    validation.promptTitle = "复核结论"
-    validation.prompt = "正确=直接接受；已修改=按当前单元格接受；删除=不进入金标准。"
+    validation.errorTitle = error_title
+    validation.error = error
+    validation.promptTitle = header
+    validation.prompt = prompt
     validation.showInputMessage = True
     validation.showErrorMessage = True
     worksheet.add_data_validation(validation)
-    validation.add(f"{conclusion_letter}2:{conclusion_letter}{final_row}")
+    validation.add(f"{column_letter}2:{column_letter}{MAX_REVIEW_ROWS}")
 
-    table_range = f"A2:{get_column_letter(len(headers))}{final_row}"
-    for value, fill in (("正确", GREEN_FILL), ("已修改", YELLOW_FILL), ("删除", RED_FILL)):
-        worksheet.conditional_formatting.add(
-            table_range,
-            FormulaRule(
-                formula=[f'${conclusion_letter}2="{value}"'],
-                fill=fill,
-            ),
+
+def _add_review_validation(
+    worksheet: Any,
+    headers: Sequence[str],
+    conclusion_headers: Sequence[str],
+    *,
+    color_entire_row: bool,
+) -> None:
+    for conclusion_header in conclusion_headers:
+        _add_list_validation(
+            worksheet,
+            headers,
+            conclusion_header,
+            REVIEW_OPTIONS,
+            allow_blank=False,
+            error_title="复核结论无效",
+            error="请从下拉列表中选择待复核、正确、已修改或删除。",
+            prompt="正确=直接接受；已修改=按当前单元格接受；删除=不进入金标准。",
         )
+        conclusion_index = headers.index(conclusion_header) + 1
+        conclusion_letter = get_column_letter(conclusion_index)
+        if color_entire_row:
+            colored_range = (
+                f"A2:{get_column_letter(len(headers))}{MAX_REVIEW_ROWS}"
+            )
+        else:
+            colored_range = (
+                f"{conclusion_letter}2:{conclusion_letter}{MAX_REVIEW_ROWS}"
+            )
+
+        for value, fill in (
+            ("正确", GREEN_FILL),
+            ("已修改", YELLOW_FILL),
+            ("删除", RED_FILL),
+        ):
+            worksheet.conditional_formatting.add(
+                colored_range,
+                FormulaRule(
+                    formula=[f'${conclusion_letter}2="{value}"'],
+                    fill=fill,
+                ),
+            )
+
+
+def _add_excel_table(worksheet: Any, headers: Sequence[str], table_name: str) -> None:
+    if worksheet.max_row < 2:
+        return
+    table = Table(
+        displayName=table_name,
+        ref=f"A1:{get_column_letter(len(headers))}{worksheet.max_row}",
+    )
+    table.tableStyleInfo = TableStyleInfo(
+        name="TableStyleMedium2",
+        showFirstColumn=False,
+        showLastColumn=False,
+        showRowStripes=True,
+        showColumnStripes=False,
+    )
+    worksheet.add_table(table)
 
 
 def _set_widths(worksheet: Any, headers: Sequence[str]) -> None:
@@ -319,6 +463,9 @@ def _set_widths(worksheet: Any, headers: Sequence[str]) -> None:
         "管制时间": 28,
         "发布机关": 28,
         "发布日期": 18,
+        "候选原文": 70,
+        "目标类型": 18,
+        "对应结构化字段": 32,
         "道路名称": 28,
         "管制路段": 38,
         "方向": 15,
@@ -329,6 +476,7 @@ def _set_widths(worksheet: Any, headers: Sequence[str]) -> None:
         "引导类型": 18,
         "路线或位置": 45,
         "适用时间": 25,
+        "时间": 25,
         "具体动作": 35,
         "原文证据": 70,
         "复核结论": 14,
@@ -339,16 +487,36 @@ def _set_widths(worksheet: Any, headers: Sequence[str]) -> None:
         "extraction_text": 65,
     }
     for index, header in enumerate(headers, start=1):
-        worksheet.column_dimensions[get_column_letter(index)].width = preferred.get(
-            header, min(max(len(header) + 4, 14), 28)
-        )
+        width = preferred.get(header, min(max(len(header) + 4, 14), 28))
+        if header.endswith("复核结论"):
+            width = 18
+        worksheet.column_dimensions[get_column_letter(index)].width = width
 
 
-def _style_review_sheet(worksheet: Any, headers: Sequence[str], row_height: float) -> None:
-    _add_review_validation(worksheet, headers)
+def _style_review_sheet(
+    worksheet: Any,
+    headers: Sequence[str],
+    row_height: float,
+    *,
+    conclusion_headers: Sequence[str],
+    color_entire_row: bool,
+    table_name: str,
+) -> None:
+    _add_review_validation(
+        worksheet,
+        headers,
+        conclusion_headers,
+        color_entire_row=color_entire_row,
+    )
     _set_widths(worksheet, headers)
     for index in range(2, worksheet.max_row + 1):
         worksheet.row_dimensions[index].height = row_height
+    _add_excel_table(worksheet, headers, table_name)
+    if "extraction_id" in headers:
+        worksheet.cell(1, headers.index("extraction_id") + 1).comment = Comment(
+            "人工补录的新行可留空；apply_review_workbook.py 会自动生成稳定 ID。",
+            "Codex",
+        )
 
 
 def export_workbook(input_path: Path, output_path: Path) -> dict[str, int]:
@@ -359,6 +527,7 @@ def export_workbook(input_path: Path, output_path: Path) -> dict[str, int]:
     announcement_rows = _build_announcement_rows(grouped)
     control_rows = _build_control_rows(rows, event_names)
     guidance_rows = _build_guidance_rows(rows, event_names)
+    missing_rows = _build_missing_rows(rows)
     raw_rows = [[row.get(field, "") for field in fieldnames] for row in rows]
 
     workbook = Workbook()
@@ -366,21 +535,87 @@ def export_workbook(input_path: Path, output_path: Path) -> dict[str, int]:
     announcement.title = ANNOUNCEMENT_SHEET
     control = workbook.create_sheet(CONTROL_SHEET)
     guidance = workbook.create_sheet(GUIDANCE_SHEET)
+    missing = workbook.create_sheet(MISSING_SHEET)
     raw = workbook.create_sheet(RAW_SHEET)
 
     _append_table(announcement, ANNOUNCEMENT_HEADERS, announcement_rows)
     _append_table(control, CONTROL_HEADERS, control_rows)
     _append_table(guidance, GUIDANCE_HEADERS, guidance_rows)
+    _append_table(missing, MISSING_HEADERS, missing_rows)
     _append_table(raw, fieldnames, raw_rows)
 
-    _style_review_sheet(announcement, ANNOUNCEMENT_HEADERS, 54)
-    _style_review_sheet(control, CONTROL_HEADERS, 66)
-    _style_review_sheet(guidance, GUIDANCE_HEADERS, 66)
+    announcement_conclusions = tuple(
+        f"{column}复核结论" for column in EVENT_COLUMN_BY_CLASS.values()
+    )
+    _style_review_sheet(
+        announcement,
+        ANNOUNCEMENT_HEADERS,
+        54,
+        conclusion_headers=announcement_conclusions,
+        color_entire_row=False,
+        table_name="AnnouncementReview",
+    )
+    _style_review_sheet(
+        control,
+        CONTROL_HEADERS,
+        66,
+        conclusion_headers=("复核结论",),
+        color_entire_row=True,
+        table_name="ControlReview",
+    )
+    _style_review_sheet(
+        guidance,
+        GUIDANCE_HEADERS,
+        66,
+        conclusion_headers=("复核结论",),
+        color_entire_row=True,
+        table_name="GuidanceReview",
+    )
+    _style_review_sheet(
+        missing,
+        MISSING_HEADERS,
+        66,
+        conclusion_headers=("复核结论",),
+        color_entire_row=True,
+        table_name="MissingCandidateReview",
+    )
+    guidance_labels = tuple(GUIDANCE_TYPE_LABELS.values())
+    _add_list_validation(
+        guidance,
+        GUIDANCE_HEADERS,
+        "引导类型",
+        guidance_labels,
+        allow_blank=True,
+        error_title="引导类型无效",
+        error="请从中文引导类型列表中选择。",
+        prompt="选择中文类型，写回时自动映射为 Schema 2.0 英文枚举。",
+    )
+    _add_list_validation(
+        missing,
+        MISSING_HEADERS,
+        "目标类型",
+        TARGET_TYPES,
+        allow_blank=True,
+        error_title="目标类型无效",
+        error="请选择道路管制、交通引导或非目标。",
+        prompt="道路管制/交通引导会进入 Gold；非目标不进入 Gold。",
+    )
+    _add_list_validation(
+        missing,
+        MISSING_HEADERS,
+        "引导类型",
+        guidance_labels,
+        allow_blank=True,
+        error_title="引导类型无效",
+        error="请从中文引导类型列表中选择。",
+        prompt="仅当目标类型为交通引导时需要填写。",
+    )
     _set_widths(raw, fieldnames)
 
     announcement.sheet_properties.tabColor = "5B9BD5"
     control.sheet_properties.tabColor = "ED7D31"
     guidance.sheet_properties.tabColor = "70AD47"
+    missing.sheet_properties.tabColor = "8064A2"
     raw.sheet_properties.tabColor = "A5A5A5"
     raw.protection.sheet = True
 
@@ -395,7 +630,12 @@ def export_workbook(input_path: Path, output_path: Path) -> dict[str, int]:
         ) as temporary:
             temporary_name = temporary.name
         workbook.save(temporary_name)
-        Path(temporary_name).replace(output_path)
+        try:
+            Path(temporary_name).replace(output_path)
+        except PermissionError as exc:
+            raise PermissionError(
+                f"无法写入 {output_path}；请先在 Excel 中关闭该工作簿。"
+            ) from exc
     finally:
         workbook.close()
         if temporary_name:
@@ -405,6 +645,7 @@ def export_workbook(input_path: Path, output_path: Path) -> dict[str, int]:
         ANNOUNCEMENT_SHEET: len(announcement_rows),
         CONTROL_SHEET: len(control_rows),
         GUIDANCE_SHEET: len(guidance_rows),
+        MISSING_SHEET: len(missing_rows),
         RAW_SHEET: len(raw_rows),
     }
 

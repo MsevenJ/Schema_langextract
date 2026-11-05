@@ -139,6 +139,7 @@ instance/
 tmp/
 temp/
 cache/
+~$*.xlsx
 *.tmp
 *.bak
 *.backup
