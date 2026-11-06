@@ -289,6 +289,7 @@ def test_apply_full_review_supports_all_resolutions_and_manual_rows(tmp_path):
     assert counts == {"gold": 23, "unreviewed": 0, "deleted": 1, "source_rows": 25}
     gold = _read_csv(csv_output)
     assert list(gold[0]) == list(CSV_FIELDNAMES)
+    assert len({row["extraction_id"] for row in gold}) == len(gold)
     assert _read_csv(unreviewed_output) == []
     assert len([json.loads(line) for line in jsonl_output.read_text(encoding="utf-8").splitlines()]) == 23
 
@@ -431,6 +432,7 @@ def test_current_notice04_to_notice08_can_complete_the_full_review_loop(tmp_path
     }
     assert _read_csv(unreviewed_output) == []
     gold = _read_csv(csv_output)
+    assert len({row["extraction_id"] for row in gold}) == len(gold)
     assert len([row for row in gold if row["record_origin"] == "needs_review"]) == 10
     manual = [row for row in gold if row["record_origin"] == "manual"]
     assert len(manual) == 2
@@ -446,3 +448,44 @@ def test_current_notice04_to_notice08_can_complete_the_full_review_loop(tmp_path
     assert overall["reviewed_rows"] == "128"
     assert overall["pending_rows"] == "0"
     assert overall["review_completion_rate"] == "1.000000"
+
+
+def test_duplicate_gold_extraction_ids_are_replaced_stably(tmp_path):
+    queue_path = tmp_path / "review_queue.csv"
+    rows = _fixture_rows()
+    duplicate_id = rows[6]["extraction_id"]
+    rows[7]["extraction_id"] = duplicate_id
+    with queue_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=RAW_HEADERS)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    workbook_path = tmp_path / "duplicate_ids.xlsx"
+    export_workbook(queue_path, workbook_path)
+    workbook = load_workbook(workbook_path)
+    control = workbook[CONTROL_SHEET]
+    control.cell(2, CONTROL_HEADERS.index("复核结论") + 1).value = "正确"
+    guidance = workbook[GUIDANCE_SHEET]
+    guidance.cell(2, GUIDANCE_HEADERS.index("引导类型") + 1).value = "一般出行建议"
+    guidance.cell(2, GUIDANCE_HEADERS.index("复核结论") + 1).value = "已修改"
+    workbook.save(workbook_path)
+    workbook.close()
+
+    observed_runs: list[list[str]] = []
+    for run_number in (1, 2):
+        csv_output = tmp_path / f"gold_{run_number}.csv"
+        apply_workbook(
+            workbook_path,
+            tmp_path / f"gold_{run_number}.jsonl",
+            csv_output,
+            tmp_path / f"unreviewed_{run_number}.csv",
+            tmp_path / f"metrics_{run_number}.csv",
+        )
+        gold = _read_csv(csv_output)
+        ids = [row["extraction_id"] for row in gold]
+        assert len(ids) == 2
+        assert len(set(ids)) == 2
+        assert ids[0] == duplicate_id
+        observed_runs.append(ids)
+
+    assert observed_runs[0] == observed_runs[1]

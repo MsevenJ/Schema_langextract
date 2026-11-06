@@ -677,6 +677,34 @@ def _write_csv(records: Iterable[dict[str, Any]], path: Path) -> None:
     _atomic_text_write(path, write)
 
 
+def _ensure_unique_gold_extraction_ids(records: Sequence[dict[str, Any]]) -> None:
+    """Make Gold extraction IDs unique while preserving the first occurrence."""
+    seen_ids: set[str] = set()
+    occurrence_by_original_id: Counter[str] = Counter()
+    for record in records:
+        original_id = str(record.get("extraction_id", "")).strip()
+        occurrence_by_original_id[original_id] += 1
+        if original_id and original_id not in seen_ids:
+            seen_ids.add(original_id)
+            continue
+
+        ordinal = occurrence_by_original_id[original_id]
+        if not original_id:
+            ordinal = max(ordinal, 1)
+        while True:
+            replacement = _synthetic_extraction_id(
+                str(record.get("source_id", "")),
+                str(record.get("extraction_class", "")),
+                str(record.get("extraction_text", "")),
+                ordinal,
+            )
+            if replacement not in seen_ids:
+                break
+            ordinal += 1
+        record["extraction_id"] = replacement
+        seen_ids.add(replacement)
+
+
 def _rate(numerator: int, denominator: int) -> str:
     return "" if denominator == 0 else f"{numerator / denominator:.6f}"
 
@@ -1017,6 +1045,7 @@ def apply_workbook(
         if index not in represented_indices:
             unreviewed_records.append(_original_record(raw_row))
 
+    _ensure_unique_gold_extraction_ids(gold_records)
     metrics = _build_metrics(raw_rows, decisions, extra_decisions, gold_records)
     _write_jsonl(gold_records, jsonl_output)
     _write_csv(gold_records, csv_output)
