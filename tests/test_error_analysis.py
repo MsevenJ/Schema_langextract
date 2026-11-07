@@ -65,9 +65,22 @@ def test_error_analysis_aligns_with_gold_and_metrics(tmp_path):
         "幻觉或非原文",
         "模型漏抽",
         "coverage候选补回",
+        "coverage候选未采用",
         "人工新增",
     }
     assert required_error_types.issubset(set(ERROR_TYPES))
+
+    unused_coverage = [
+        row for row in analysis
+        if row["record_origin"] == "needs_review" and row["in_gold"] == "0"
+    ]
+    assert len(unused_coverage) == 7
+    assert {
+        row["error_type"] for row in unused_coverage
+    } == {"coverage候选未采用"}
+    hallucinations = [row for row in analysis if row["error_type"] == "幻觉或非原文"]
+    assert len(hallucinations) == 2
+    assert all(row["record_origin"] == "model" for row in hallucinations)
 
     report = report_path.read_text(encoding="utf-8")
     for heading in (
@@ -77,6 +90,7 @@ def test_error_analysis_aligns_with_gold_and_metrics(tmp_path):
         "多阶段活动时间与多日期管制时间",
         "发布机关与发布日期误判",
         "重复抽取和漏抽典型案例",
+        "coverage候选未采用",
         "第一轮提示词校准建议",
     ):
         assert heading in report

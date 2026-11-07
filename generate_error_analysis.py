@@ -98,6 +98,7 @@ ERROR_TYPES = (
     "幻觉或非原文",
     "模型漏抽",
     "coverage候选补回",
+    "coverage候选未采用",
     "人工新增",
     "属性值错误",
 )
@@ -441,7 +442,7 @@ def _classify_error(
     extraction_class = (gold or raw or {}).get("extraction_class", "")
     metric_class = (raw or gold or {}).get("extraction_class", "")
     if origin == "needs_review":
-        return "coverage候选补回" if gold else "幻觉或非原文"
+        return "coverage候选补回" if gold else "coverage候选未采用"
     if origin == "manual":
         if gold and extraction_class in {"event_time", "control_time"}:
             return "模型漏抽"
@@ -453,10 +454,18 @@ def _classify_error(
             return "重复抽取"
         if is_cross_class or metric_class in {"issuing_authority", "publication_date"}:
             return "类别误判"
+        explicit_fabrication = bool(re.search(
+            r"杜撰|不存在|非原文|原文无|无法对齐|不在原文",
+            " ".join((
+                raw.get("review_note", "") if raw else "",
+                raw.get("rejection_reasons", "") if raw else "",
+                gold.get("review_note", "") if gold else "",
+            )),
+        ))
         if raw and (
             raw.get("grounding_status") == "mismatch"
-            or raw.get("validation_status") == "rejected"
             or not raw.get("char_start")
+            or explicit_fabrication
         ):
             return "幻觉或非原文"
         return "类别误判"
@@ -490,6 +499,8 @@ def _describe_error(
             f"coverage 候选经人工确认并结构化为 "
             f"{CLASS_LABELS.get((gold or {}).get('extraction_class', ''), (gold or {}).get('extraction_class', ''))}。"
         )
+    if error_type == "coverage候选未采用":
+        return "coverage 候选存在于原文，但因重复、片段化或未被采用而不进入 Gold。"
     if error_type in {"模型漏抽", "人工新增"}:
         return "原始模型队列无对应可用记录，由人工补入或补齐。"
     if error_type == "重复抽取":
@@ -790,6 +801,10 @@ def build_report(
         row for row in analysis_rows
         if row.get("in_gold") == "1" and row.get("error_type") in missing_types
     ]
+    unused_coverage_examples = [
+        row for row in analysis_rows
+        if row.get("error_type") == "coverage候选未采用"
+    ]
     lines.extend([
         "",
         "## 7. 重复抽取和漏抽典型案例",
@@ -802,6 +817,10 @@ def build_report(
         "",
         _example_table(missing_examples, 8).rstrip(),
         "",
+        f"### coverage候选未采用（{len(unused_coverage_examples)} 条）",
+        "",
+        _example_table(unused_coverage_examples, 8).rstrip(),
+        "",
         "## 8. 第一轮提示词校准建议",
         "",
         "| 优先级 | 建议 | 针对证据 | 验收方式 |",
@@ -811,7 +830,7 @@ def build_report(
         f"| P1 | 要求 control_rule/traffic_guidance 对每个属性逐项检查，特别是道路、时间、措施、车辆范围、路线和动作。 | 属性字段修改 {sum(field_counts.values())} 次 | 属性缺失率下降 |",
         f"| P1 | 发布机关仅接受明确落款/来源，发布日期仅接受发布语境；增加反例覆盖“特此公告”和活动日期。 | 机关/日期误判 {len(authority_date_errors)} 条 | 两类删除率下降 |",
         f"| P1 | 在输出前按类别+原文区间+文本去重，不得用无原文区间的改写文本代替证据。 | 重复 {len(duplicate_examples)} 条 | 重复 ID/文本候选归零 |",
-        f"| P2 | 将 coverage 中频繁补回的表达形式补入 few-shot，但保留 coverage 作为漏抽安全网。 | coverage补回 {sum(row.get('error_type') == 'coverage候选补回' for row in analysis_rows)} 条 | coverage有效补回数下降且召回不降 |",
+        f"| P2 | 将 coverage 中频繁补回的表达形式补入 few-shot，但保留 coverage 作为漏抽安全网，并分别监控补回与未采用候选。 | coverage补回 {sum(row.get('error_type') == 'coverage候选补回' for row in analysis_rows)} 条，未采用 {len(unused_coverage_examples)} 条 | coverage有效补回数下降且召回不降 |",
         "",
         "## 9. 错误类型口径",
         "",
