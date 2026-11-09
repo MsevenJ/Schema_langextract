@@ -74,6 +74,30 @@ def test_control_guidance_boundary_and_attribute_regression() -> None:
     assert "禁止停车" in pipeline.SERVICE_GUIDANCE_PROMPT
     assert "属于 control_rule" in pipeline.SERVICE_GUIDANCE_PROMPT
 
+    notice04_example = next(
+        example
+        for example in pipeline.EXAMPLES
+        if "指引展馆内离场车辆从7号门" in example.text
+    )
+    notice04_control = next(
+        extraction
+        for extraction in notice04_example.extractions
+        if extraction.extraction_class == "control_rule"
+        and "南风东路双向实施临时交通管制" in extraction.extraction_text
+    )
+    notice04_guidance = next(
+        extraction
+        for extraction in notice04_example.extractions
+        if extraction.extraction_class == "traffic_guidance"
+        and "指引展馆内离场车辆从7号门" in extraction.extraction_text
+    )
+    assert notice04_control.extraction_text.endswith("对南风东路双向实施临时交通管制")
+    assert "指引" not in notice04_control.extraction_text
+    assert notice04_guidance.extraction_text == (
+        "指引展馆内离场车辆从7号门经南风东路华快通道直接进入新洲收费站。"
+    )
+    assert notice04_guidance.attributes["guidance_type"] == "egress"
+
 
 def test_publication_metadata_negative_example_regression() -> None:
     authority_negative = next(
@@ -86,16 +110,42 @@ def test_publication_metadata_negative_example_regression() -> None:
     ] == ["publication_date"]
     assert authority_negative.extractions[0].extraction_text == "2026年10月"
 
-    date_negative = next(
+    notice04_header = next(
         example
         for example in pipeline.NOTICE_METADATA_EXAMPLES
-        if example.text == "10月16日至18日，重庆奥体中心将举行演唱会。"
+        if "时间：2026-10-14 11:09 来源：本网" in example.text
     )
-    assert date_negative.extractions == []
-    assert "只接受原文末尾明确落款" in pipeline.NOTICE_METADATA_PROMPT
-    assert "活动日期、管制日期和网页时间不是发布日期" in (
-        pipeline.NOTICE_METADATA_PROMPT
+    assert [
+        extraction.extraction_class for extraction in notice04_header.extractions
+    ] == ["publication_date"]
+    assert notice04_header.extractions[0].extraction_text == "2026-10-14"
+
+    notice08_opening = next(
+        example
+        for example in pipeline.NOTICE_METADATA_EXAMPLES
+        if "重庆市公安局九龙坡区分局交通管理支队" in example.text
     )
+    assert [
+        extraction.extraction_class for extraction in notice08_opening.extractions
+    ] == ["issuing_authority"]
+    assert notice08_opening.extractions[0].extraction_text == (
+        "重庆市公安局九龙坡区分局交通管理支队"
+    )
+    assert all(
+        extraction.extraction_class != "publication_date"
+        for extraction in notice08_opening.extractions
+    )
+
+    generic_department = next(
+        example
+        for example in pipeline.NOTICE_METADATA_EXAMPLES
+        if example.text.startswith("公安交管部门将根据")
+    )
+    assert generic_department.extractions == []
+    assert "正文开头明确" in pipeline.NOTICE_METADATA_PROMPT
+    assert "“本网”“特此通告/特此公告”" in pipeline.NOTICE_METADATA_PROMPT
+    assert "带“时间/发布时间”标签的明确日期" in pipeline.NOTICE_METADATA_PROMPT
+    assert "活动日期和管制日期不能作为发布日期" in pipeline.NOTICE_METADATA_PROMPT
 
 
 def test_prompt_deduplication_and_example_grounding_regression() -> None:

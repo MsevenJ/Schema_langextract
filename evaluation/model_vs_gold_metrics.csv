@@ -1,11 +1,11 @@
 ﻿extraction_class,model_rows,gold_rows,reviewed_rows,pending_rows,correct_rows,modified_rows,deleted_rows,added_rows,review_completion_rate,exact_acceptance_rate,gold_retention_rate
-issuing_authority,5,4,5,0,4,0,1,0,1.000000,0.800000,0.800000
+issuing_authority,5,3,5,0,3,0,2,0,1.000000,0.600000,0.600000
 publication_date,5,4,5,0,4,0,1,0,1.000000,0.800000,0.800000
 event_name,5,5,5,0,5,0,0,0,1.000000,1.000000,1.000000
 event_venue,5,5,5,0,5,0,0,0,1.000000,1.000000,1.000000
 event_time,5,7,7,0,3,4,0,2,1.000000,0.428571,1.000000
 control_time,22,19,22,0,10,12,0,0,1.000000,0.454545,0.863636
-control_rule,38,32,40,0,24,7,9,2,1.000000,0.600000,0.800000
-traffic_guidance,28,30,30,0,5,20,5,2,1.000000,0.166667,1.000000
+control_rule,38,32,40,0,20,11,9,2,1.000000,0.500000,0.800000
+traffic_guidance,28,31,31,0,5,21,5,3,1.000000,0.161290,1.000000
 needs_review,13,0,13,0,0,6,7,0,1.000000,0.000000,0.000000
-__overall__,126,106,132,0,60,49,23,6,1.000000,0.454545,0.803030
+__overall__,126,106,133,0,55,54,24,7,1.000000,0.413534,0.796992

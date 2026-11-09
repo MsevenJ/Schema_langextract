@@ -120,7 +120,8 @@ PROMPT = """
 你负责从中文活动交通通告中抽取可回溯到原文的结构化信息。
 
 只能使用以下 extraction_class：
-- issuing_authority：通告的发布机关，仅在原文明确写出发布机关或落款时抽取。
+- issuing_authority：通告的发布机关，包括明确落款、明确来源机关，或正文开头
+  明确指出的完整发布主体。
 - publication_date：通告的发布日期，可精确到日，也可只精确到月。
 - event_name：原文明确出现的活动、演出、展会或比赛名称，包括正文中的名称。
 - event_venue：原文明确出现的活动场馆或举办地点。
@@ -141,11 +142,13 @@ PROMPT = """
    若活动按“第一期/第二期/第三期”、不同场次或不同日期分阶段列出，
    必须对每个阶段分别输出一条 event_time，不得只用笼统总跨度代替。
 4. publication_date 只有完整日期时使用 {"precision":"day"}；原文只有
-   “2027年6月”这类月份时使用 {"precision":"month"}。原文没有发布日期时
-   不输出。不得把活动日期、管制日期或网页时间当发布日期。
-5. issuing_authority 只接受原文末尾明确落款的发布机关。正文中提到“公安交管
-   部门将采取措施”不等于落款。“特此通告/特此公告”“来源”“发布时间”
-   “浏览次数”“分享”等不是发布机关。没有明确落款时不输出。
+   “2027年6月”这类月份时使用 {"precision":"month"}。官方网页页头中带
+   “时间/发布时间”标签的明确日期可以作为发布日期；活动日期和管制日期不能作为
+   发布日期。原文没有明确发布日期时不输出。
+5. issuing_authority 可以是原文末尾明确落款、带来源标签的明确机关，或正文开头
+   明确指出并实际发布/实施本通告的完整机关名称。“本网”“特此通告/特此公告”
+   “公安交管部门”等泛称，以及“浏览次数”“分享”等网页元素都不是发布机关。
+   仅泛泛提到某部门将采取措施时不输出。
 6. 每个 control_rule 只覆盖一条完整规定。封闭、禁行、禁止驶入、限行、禁止停车、
    单向通行、只出不进等强制性表达必须归为 control_rule。若主句后紧接例外车辆或
    同一规则的补充句，应保留这些连续文字；不要合并不同编号的独立规则。
@@ -169,7 +172,8 @@ PROMPT = """
     始终属于 control_rule，不能归为 traffic_guidance。
 12. 同一句或同一段同时包含强制管制和绕行/入场/散场/停车/上下客引导时，
     必须分别输出 control_rule 和 traffic_guidance；两者的 extraction_text 各只覆盖自己
-    对应的连续原文子句，不得在两个类别中重复整句或整段。
+    对应的连续原文子句。control_rule 必须在强制规定及其例外结束处截止，严禁包含
+    后续独立绕行或离场引导；不得在两个类别中重复整句或整段。
 13. 输出 control_rule 前逐项检查并补全原文明示的道路、路段、方向、时间、措施、
     车辆范围、条件和例外；输出 traffic_guidance 前逐项检查类型、路线/位置、时间、
     车辆范围、具体动作和条件。只补原文明示的值，不得猜测。
@@ -480,7 +484,10 @@ EXAMPLES = [
             "畅通交通微循环。\n"
             "在东至科韵路（不含）、南至凤浦中路（含）、西至华南快速干线（不含）、"
             "北至阅江中路（含），严格实施货车限行措施，特别是早晚高峰禁止所有货车"
-            "（持广交会车证的货车除外）进入通行。"
+            "（持广交会车证的货车除外）进入通行。\n"
+            "散场期间（16:30至19:00），适时启用南风东华快通道，对南风东路双向"
+            "实施临时交通管制，指引展馆内离场车辆从7号门经南风东路华快通道"
+            "直接进入新洲收费站。"
         ),
         extractions=[
             lx.data.Extraction(
@@ -548,6 +555,38 @@ EXAMPLES = [
                     "vehicle_scope": "所有货车",
                     "condition": "",
                     "exception": "持广交会车证的货车除外",
+                },
+            ),
+            lx.data.Extraction(
+                extraction_class="control_rule",
+                extraction_text=(
+                    "散场期间（16:30至19:00），适时启用南风东华快通道，"
+                    "对南风东路双向实施临时交通管制"
+                ),
+                attributes={
+                    "road_names": ["南风东路"],
+                    "road_range": "南风东路双向",
+                    "direction": "双向",
+                    "time_text": "16:30至19:00",
+                    "measure": "临时交通管制",
+                    "vehicle_scope": "",
+                    "condition": "适时启用",
+                    "exception": "",
+                },
+            ),
+            lx.data.Extraction(
+                extraction_class="traffic_guidance",
+                extraction_text=(
+                    "指引展馆内离场车辆从7号门经南风东路华快通道"
+                    "直接进入新洲收费站。"
+                ),
+                attributes={
+                    "guidance_type": "egress",
+                    "route_or_location": "7号门经南风东路华快通道直接进入新洲收费站",
+                    "time_text": "16:30至19:00",
+                    "vehicle_scope": "展馆内离场车辆",
+                    "action": "离场",
+                    "condition": "适时启用",
                 },
             ),
         ],
@@ -652,10 +691,12 @@ EVENT_METADATA_EXAMPLES = [
 NOTICE_METADATA_PROMPT = """
 从中文活动交通通告中只抽取 issuing_authority、publication_date、control_time。
 
-issuing_authority 只接受原文末尾明确落款的发布机关。正文提到“公安交管部门”、
-“特此通告/特此公告”、“来源”“发布时间”、网站名称和文章标题都不是落款。
+issuing_authority 可以是原文末尾明确落款、带来源标签的明确机关，或正文开头明确
+指出并实际发布/实施本通告的完整机关名称。“本网”“特此通告/特此公告”以及
+“公安交管部门”等泛称不是发布机关；文章标题、浏览次数和分享等网页元素也不是。
 publication_date 仅限明确的正式发布日期：完整日期添加 precision=day，只有
-“某年某月”时添加 precision=month。活动日期、管制日期和网页时间不是发布日期。
+“某年某月”时添加 precision=month。官方网页页头带“时间/发布时间”标签的明确日期
+可以保留；活动日期和管制日期不能作为发布日期。
 control_time 是道路封闭、禁行、限行或其他交通管制的总体或分阶段时段，不得把活动
 举办时间当作 control_time。进场/散场、不同日期或不同分时段分别对应规则时，
 必须分别输出原文中各自连续的 control_time，不得自行展开或推算日期。
@@ -690,10 +731,42 @@ NOTICE_METADATA_EXAMPLES = [
             ),
         ],
     ),
-    # Gold-backed negative from notice08: this is an activity date, not a
-    # publication date, so this notice-metadata subtask returns no extraction.
+    # Gold-backed notice04 page header: the labelled web date is a publication
+    # date, while the generic source “本网” is not an issuing authority.
     lx.data.ExampleData(
-        text="10月16日至18日，重庆奥体中心将举行演唱会。",
+        text="时间：2026-10-14 11:09 来源：本网【字体：大中小】 分享到：",
+        extractions=[
+            lx.data.Extraction(
+                extraction_class="publication_date",
+                extraction_text="2026-10-14",
+                attributes={"precision": "day"},
+            ),
+        ],
+    ),
+    # Gold-backed notice08 opening: the activity dates are not publication
+    # dates, while the full body explicitly acting at the opening is retained.
+    lx.data.ExampleData(
+        text=(
+            "10月16日至18日，重庆奥体中心将举行演唱会。为保障活动期间奥体中心周边"
+            "道路通行有序，预防交通事故发生，重庆市公安局九龙坡区分局交通管理支队"
+            "将依法对奥体中心周边道路实施临时交通管制措施，请观演市民、驾车出行人员"
+            "和周边居民提前安排行程。"
+        ),
+        extractions=[
+            lx.data.Extraction(
+                extraction_class="issuing_authority",
+                extraction_text="重庆市公安局九龙坡区分局交通管理支队",
+                attributes={},
+            ),
+        ],
+    ),
+    # Gold-backed notice08 negative: this generic department reference is not
+    # an issuing authority.
+    lx.data.ExampleData(
+        text=(
+            "公安交管部门将根据现场车流、人流情况，"
+            "适时采取其他临时管控措施。"
+        ),
         extractions=[],
     ),
 ]
@@ -713,7 +786,7 @@ condition，特殊车辆及允许通行情形写入 exception。只能抽取原�
 多日期、进场/散场或不同分时段对应不同规则时，每条规则只能绑定自己的原文时段，
 不得跨阶段继承。输出前逐项检查道路、路段、方向、时间、措施、车辆范围、条件和例外。
 若同一句后半部是绕行、入场或散场引导，control_rule 的 extraction_text 只截取强制规定
-及其例外子句，不要把后续引导子句一起重复输出。
+及其例外子句，并在独立引导开始前截止；不要把后续引导子句一起重复输出。
 
 extraction_text 必须是原文中连续、逐字完全一致的文字，不得改写、拼接或补造。
 输出前按类别、原文位置和文本去重。
