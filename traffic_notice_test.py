@@ -72,7 +72,7 @@ except ModuleNotFoundError:
 
 
 SCHEMA_VERSION = "2.0"
-PROMPT_VERSION = "2.1.0"
+PROMPT_VERSION = "2.2.0"
 
 EXTRACTION_CLASSES = (
     "issuing_authority",
@@ -138,19 +138,25 @@ PROMPT = """
 3. event_time 与 control_time 必须严格区分。活动“举行、举办、开演、比赛”的
    时间属于 event_time；道路“管制、封闭、禁行、限行”的时间属于 control_time。
    不得仅因两个时间接近就把活动时间当作管制时间。
+   若活动按“第一期/第二期/第三期”、不同场次或不同日期分阶段列出，
+   必须对每个阶段分别输出一条 event_time，不得只用笼统总跨度代替。
 4. publication_date 只有完整日期时使用 {"precision":"day"}；原文只有
    “2027年6月”这类月份时使用 {"precision":"month"}。原文没有发布日期时
-   不输出。不得把活动日期当发布日期。
-5. 不得猜测发布机关。提到公安交管部门将采取措施，不等于它是发布机关。
-   “特此通告”“来源”“发布时间”“浏览次数”“分享”等网页文字不是发布机关。
-6. 每个 control_rule 只覆盖一条完整规定。若主句后紧接例外车辆、允许通行方式
-   或同一规则的补充句，应保留这些连续句子；不要合并不同编号的独立规则。
+   不输出。不得把活动日期、管制日期或网页时间当发布日期。
+5. issuing_authority 只接受原文末尾明确落款的发布机关。正文中提到“公安交管
+   部门将采取措施”不等于落款。“特此通告/特此公告”“来源”“发布时间”
+   “浏览次数”“分享”等不是发布机关。没有明确落款时不输出。
+6. 每个 control_rule 只覆盖一条完整规定。封闭、禁行、禁止驶入、限行、禁止停车、
+   单向通行、只出不进等强制性表达必须归为 control_rule。若主句后紧接例外车辆或
+   同一规则的补充句，应保留这些连续文字；不要合并不同编号的独立规则。
 7. control_rule 的 attributes 必须且只能使用：road_names、road_range、direction、
    time_text、measure、vehicle_scope、condition、exception。road_names 必须是字符串
    数组，其余均为字符串；缺失值用空数组或空字符串。
 8. 每条 control_rule 的 time_text 必须填写其对应的原文管制时段。时间写在规则
    句内时逐字复制；写在本条上方的小标题、段首或章节标题时继承该原文时间。
-   不得转换成 ISO 时间，不得推算。原文确无明确时间才填写空字符串。
+   多日期、进场/散场或不同分时段对应不同规则时，必须分别抽取 control_time，
+   并将每个原文时段只绑定到其对应规则；不得跨阶段借用、不得自行展开日期、
+   不得转换成 ISO 时间或推算。原文确无明确时间才填写空字符串。
 9. “根据现场情况”“视情”“适时启用”等写入 control_rule.condition；特殊车辆、
    持证车辆、允许通行方式等写入 control_rule.exception。
 10. traffic_guidance 的 attributes 必须且只能使用：guidance_type、
@@ -161,12 +167,20 @@ PROMPT = """
     允许停车信息用 parking，上下客点用 drop_off，公交地铁调整用
     public_transport，一般提示用 general_advice。严格禁行、封闭、限行和禁止停车
     始终属于 control_rule，不能归为 traffic_guidance。
-12. 不再使用 dynamic_adjustment 或 travel_advice。动态条件并入对应
+12. 同一句或同一段同时包含强制管制和绕行/入场/散场/停车/上下客引导时，
+    必须分别输出 control_rule 和 traffic_guidance；两者的 extraction_text 各只覆盖自己
+    对应的连续原文子句，不得在两个类别中重复整句或整段。
+13. 输出 control_rule 前逐项检查并补全原文明示的道路、路段、方向、时间、措施、
+    车辆范围、条件和例外；输出 traffic_guidance 前逐项检查类型、路线/位置、时间、
+    车辆范围、具体动作和条件。只补原文明示的值，不得猜测。
+14. 不再使用 dynamic_adjustment 或 travel_advice。动态条件并入对应
     control_rule.condition，一般提示并入 traffic_guidance。
-13. 不要输出本清单之外的类别，不要重复抽取同一信息，不要输出“未提供”。
-14. 最终答案必须且只能是一个合法 JSON 对象，顶层只能有一个名为 extractions
+15. 输出前按“extraction_class + 原文出现区间 + extraction_text”去重。同一类别、
+    同一原文位置、同一文本只保留一次；不得因为分任务或上下文重复输出。
+    不要输出本清单之外的类别，不要输出“未提供”。
+16. 最终答案必须且只能是一个合法 JSON 对象，顶层只能有一个名为 extractions
     的键，其值必须是数组。不要在 JSON 前后输出解释、标题或 Markdown 代码围栏。
-15. extractions 数组中的每个元素只表示一条抽取，格式必须是：
+17. extractions 数组中的每个元素只表示一条抽取，格式必须是：
     {"类别名": "与原文逐字一致的连续片段", "类别名_attributes": {属性}}
     同一类别有多条时放入多个独立元素，不能把类别改成嵌套数组。
 """.strip()
@@ -454,6 +468,141 @@ EXAMPLES = [
             ),
         ],
     ),
+    # Calibrated from reviewed notice04 Gold: multi-stage event times must be
+    # separate extractions, and every structured field must come from source.
+    lx.data.ExampleData(
+        text=(
+            "第140届广交会定于2026年10月15日至11月4日在广交会展馆举行。\n"
+            "第一期：10月15日至19日；\n"
+            "第二期：10月23日至27日；\n"
+            "第三期：10月31日至11月4日。\n"
+            "每天进场高峰期间（08:00至11:00）开放8号门，允许社会车辆借道展场西路，"
+            "畅通交通微循环。\n"
+            "在东至科韵路（不含）、南至凤浦中路（含）、西至华南快速干线（不含）、"
+            "北至阅江中路（含），严格实施货车限行措施，特别是早晚高峰禁止所有货车"
+            "（持广交会车证的货车除外）进入通行。"
+        ),
+        extractions=[
+            lx.data.Extraction(
+                extraction_class="event_name",
+                extraction_text="第140届广交会",
+                attributes={},
+            ),
+            lx.data.Extraction(
+                extraction_class="event_venue",
+                extraction_text="广交会展馆",
+                attributes={},
+            ),
+            lx.data.Extraction(
+                extraction_class="event_time",
+                extraction_text="第一期：10月15日至19日；",
+                attributes={},
+            ),
+            lx.data.Extraction(
+                extraction_class="event_time",
+                extraction_text="第二期：10月23日至27日；",
+                attributes={},
+            ),
+            lx.data.Extraction(
+                extraction_class="event_time",
+                extraction_text="第三期：10月31日至11月4日。",
+                attributes={},
+            ),
+            lx.data.Extraction(
+                extraction_class="control_time",
+                extraction_text="08:00至11:00",
+                attributes={},
+            ),
+            lx.data.Extraction(
+                extraction_class="traffic_guidance",
+                extraction_text=(
+                    "每天进场高峰期间（08:00至11:00）开放8号门，"
+                    "允许社会车辆借道展场西路，畅通交通微循环。"
+                ),
+                attributes={
+                    "guidance_type": "access",
+                    "route_or_location": "展场西路",
+                    "time_text": "08:00至11:00",
+                    "vehicle_scope": "社会车辆",
+                    "action": "借道进入",
+                    "condition": "每天进场高峰期间",
+                },
+            ),
+            lx.data.Extraction(
+                extraction_class="control_rule",
+                extraction_text=(
+                    "在东至科韵路（不含）、南至凤浦中路（含）、"
+                    "西至华南快速干线（不含）、北至阅江中路（含），"
+                    "严格实施货车限行措施，特别是早晚高峰禁止所有货车"
+                    "（持广交会车证的货车除外）进入通行。"
+                ),
+                attributes={
+                    "road_names": ["科韵路", "凤浦中路", "华南快速干线", "阅江中路"],
+                    "road_range": (
+                        "东至科韵路（不含）、南至凤浦中路（含）、"
+                        "西至华南快速干线（不含）、北至阅江中路（含）"
+                    ),
+                    "direction": "",
+                    "time_text": "早晚高峰",
+                    "measure": "货车限行",
+                    "vehicle_scope": "所有货车",
+                    "condition": "",
+                    "exception": "持广交会车证的货车除外",
+                },
+            ),
+        ],
+    ),
+    # Calibrated from reviewed notice07 Gold: one sentence may contain both a
+    # mandatory clause and a detour clause, but their source spans stay apart.
+    lx.data.ExampleData(
+        text=(
+            "管制时间：2026年10月18日22时至10月29日22时。\n"
+            "国展大道（辛柴路至国瑞路段）主路、辅路双向禁止一切车辆通行"
+            "（10月18日22时至10月26日6时持布撤展车证、10月26日6时至10月28日22时"
+            "持农机展嘉宾大巴车辆通行证除外），社会车辆可绕行辛柴路、国瑞路、"
+            "海河南道等道路。"
+        ),
+        extractions=[
+            lx.data.Extraction(
+                extraction_class="control_time",
+                extraction_text="2026年10月18日22时至10月29日22时",
+                attributes={},
+            ),
+            lx.data.Extraction(
+                extraction_class="control_rule",
+                extraction_text=(
+                    "国展大道（辛柴路至国瑞路段）主路、辅路双向禁止一切车辆通行"
+                    "（10月18日22时至10月26日6时持布撤展车证、10月26日6时至10月28日22时"
+                    "持农机展嘉宾大巴车辆通行证除外）"
+                ),
+                attributes={
+                    "road_names": ["国展大道"],
+                    "road_range": "辛柴路至国瑞路段主路、辅路",
+                    "direction": "双向",
+                    "time_text": "2026年10月18日22时至10月29日22时",
+                    "measure": "禁止一切车辆通行",
+                    "vehicle_scope": "一切车辆",
+                    "condition": "",
+                    "exception": (
+                        "10月18日22时至10月26日6时持布撤展车证、"
+                        "10月26日6时至10月28日22时持农机展嘉宾大巴车辆通行证除外"
+                    ),
+                },
+            ),
+            lx.data.Extraction(
+                extraction_class="traffic_guidance",
+                extraction_text="社会车辆可绕行辛柴路、国瑞路、海河南道等道路",
+                attributes={
+                    "guidance_type": "detour",
+                    "route_or_location": "辛柴路、国瑞路、海河南道",
+                    "time_text": "2026年10月18日22时至10月29日22时",
+                    "vehicle_scope": "社会车辆",
+                    "action": "绕行",
+                    "condition": "",
+                },
+            ),
+        ],
+    ),
 ]
 
 
@@ -476,12 +625,15 @@ EVENT_METADATA_PROMPT = """
 活动场馆、活动举办时间分别输出为独立 extraction。活动名称可能在正文中，应
 保留“巡回演唱会”“博览会”等完整文字。event_time 仅表示活动举办时间，绝不能
 把道路封闭、禁行、管制时段当作 event_time。
+原文按“第一期/第二期/第三期”、不同场次或不同日期分阶段列出活动时间时，
+每个阶段必须分别输出一条 event_time；不得只输出笼统总跨度，也不得将多个
+非连续阶段拼接为一条 extraction_text。
 
 每个 JSON 数组元素只放一个类别，类别名必须严格使用 event_name、event_venue、
 event_time，不得改成 event、venue、event_date、date 或 time。
 
 每个 extraction_text 必须是原文中连续、逐字完全一致的片段，不得改写、拼接、
-推算或输出“未提供”。原文没有的类别不要输出。
+推算或输出“未提供”。原文没有的类别不要输出。输出前按类别、原文位置和文本去重。
 最终只能输出 {"extractions":[...]} JSON 对象，不得输出其他字段或说明。
 """.strip()
 
@@ -500,15 +652,18 @@ EVENT_METADATA_EXAMPLES = [
 NOTICE_METADATA_PROMPT = """
 从中文活动交通通告中只抽取 issuing_authority、publication_date、control_time。
 
-issuing_authority 仅限原文明确出现的发布机关。“来源”“发布时间”“浏览次数”、
-网站名称和文章标题不是发布机关。publication_date 仅限正式发布日期：完整日期
-添加 precision=day，只有“某年某月”时添加 precision=month；网页元数据里的时间
-不得当作正式发布日期。control_time 是道路封闭、禁行、限行或其他交通管制的
-总体或分阶段时段，不得把活动举办时间当作 control_time。原文没有的类别不要输出。
+issuing_authority 只接受原文末尾明确落款的发布机关。正文提到“公安交管部门”、
+“特此通告/特此公告”、“来源”“发布时间”、网站名称和文章标题都不是落款。
+publication_date 仅限明确的正式发布日期：完整日期添加 precision=day，只有
+“某年某月”时添加 precision=month。活动日期、管制日期和网页时间不是发布日期。
+control_time 是道路封闭、禁行、限行或其他交通管制的总体或分阶段时段，不得把活动
+举办时间当作 control_time。进场/散场、不同日期或不同分时段分别对应规则时，
+必须分别输出原文中各自连续的 control_time，不得自行展开或推算日期。
+原文没有的类别不要输出。
 
 每个 JSON 数组元素只放一个类别，类别名必须严格使用 issuing_authority、
 publication_date、control_time。extraction_text 必须是原文中连续、逐字完全一致
-的片段，不得改写、拼接、推算或输出“未提供”。
+的片段，不得改写、拼接、推算或输出“未提供”。输出前按类别、原文位置和文本去重。
 最终只能输出 {"extractions":[...]} JSON 对象，不得输出其他字段或说明。
 """.strip()
 
@@ -522,6 +677,25 @@ NOTICE_METADATA_EXAMPLES = [
         ],
     )
     for example in EXAMPLES
+] + [
+    # Gold-backed negative from notice07: “特此公告” is not an authority;
+    # the explicit date at the end is the publication date.
+    lx.data.ExampleData(
+        text="特此公告。\n\n2026年10月",
+        extractions=[
+            lx.data.Extraction(
+                extraction_class="publication_date",
+                extraction_text="2026年10月",
+                attributes={"precision": "month"},
+            ),
+        ],
+    ),
+    # Gold-backed negative from notice08: this is an activity date, not a
+    # publication date, so this notice-metadata subtask returns no extraction.
+    lx.data.ExampleData(
+        text="10月16日至18日，重庆奥体中心将举行演唱会。",
+        extractions=[],
+    ),
 ]
 
 
@@ -536,8 +710,13 @@ road_names、road_range、direction、time_text、measure、vehicle_scope、cond
 exception。章节标题、分组标题或本条上方明确给出的管制时间必须逐字继承到
 time_text；没有明确时间时填空字符串。视情、根据现场情况、适时启用写入
 condition，特殊车辆及允许通行情形写入 exception。只能抽取原文明示信息。
+多日期、进场/散场或不同分时段对应不同规则时，每条规则只能绑定自己的原文时段，
+不得跨阶段继承。输出前逐项检查道路、路段、方向、时间、措施、车辆范围、条件和例外。
+若同一句后半部是绕行、入场或散场引导，control_rule 的 extraction_text 只截取强制规定
+及其例外子句，不要把后续引导子句一起重复输出。
 
 extraction_text 必须是原文中连续、逐字完全一致的文字，不得改写、拼接或补造。
+输出前按类别、原文位置和文本去重。
 最终只能输出 {"extractions":[...]} JSON 对象，不得输出其他字段或说明。
 """.strip()
 
@@ -570,9 +749,12 @@ traffic_guidance，guidance_type 只能是 detour、access、egress。停车、�
 
 属性必须包含 guidance_type、route_or_location、time_text、vehicle_scope、action、
 condition。时间必须逐字复制原文，没有明确时间时填空字符串。每条 extraction
-只覆盖一条完整路线，只能抽取原文明示信息。
+只覆盖一条完整路线，必须填全原文明示的路线/位置、适用时间、车辆范围、具体动作和条件。
+同一句前半部是强制管制、后半部是绕行/入场/散场时，只抽取后半部连续的引导子句，
+不得在 traffic_guidance 中重复整句管制原文。只能抽取原文明示信息。
 
 extraction_text 必须是原文中连续、逐字完全一致的文字，不得改写、拼接或补造。
+输出前按类别、原文位置和文本去重。
 最终只能输出 {"extractions":[...]} JSON 对象，不得输出其他字段或说明。
 """.strip()
 
@@ -601,9 +783,12 @@ general_advice。绕行、入场、散场或离场路线本次不要输出。封
 
 属性必须包含 guidance_type、route_or_location、time_text、vehicle_scope、action、
 condition。时间必须逐字复制原文，没有明确时间时填空字符串。每条 extraction
-只覆盖一条完整组织信息或建议，只能抽取原文明示信息。
+只覆盖一条完整组织信息或建议，必须填全原文明示的位置、时间、车辆范围、动作和条件。
+“允许停放/停车场位置”属于 parking；“禁止停车”是强制规定，属于 control_rule，本任务不输出。
+同一段还有强制管制时，只截取本类引导的连续原文子句，不重复整段。只能抽取原文明示信息。
 
 extraction_text 必须是原文中连续、逐字完全一致的文字，不得改写、拼接或补造。
+输出前按类别、原文位置和文本去重。
 最终只能输出 {"extractions":[...]} JSON 对象，不得输出其他字段或说明。
 """.strip()
 
